@@ -1,5 +1,5 @@
-import { ArrowForwardIcon, ArrowRightIcon } from '@chakra-ui/icons'
-import { Button, Flex, FormControl, FormLabel, Input, useColorMode, useColorModeValue, Text, Heading } from '@chakra-ui/react'
+import { ArrowForwardIcon } from '@chakra-ui/icons'
+import { Button, Flex, FormControl, FormLabel, Input, useColorModeValue, Text, Heading } from '@chakra-ui/react'
 import { useState } from 'react'
 
 export const LoginPage = () => {
@@ -7,7 +7,6 @@ export const LoginPage = () => {
   const [username, setUsername] = useState('')
   const [passphrase, setPassphrase] = useState('')
   //colors
-  const { toggleColorMode } = useColorMode()
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
   const pageBg = useColorModeValue('#87E0E1', '#5A8D98')
 
