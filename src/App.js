@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Redirect, Route } from 'react-router-dom';
-import { LoginPage } from './features/login/Login';
+import { LoginPage } from './features/auth/login/Login';
 import { NavBar } from './features/navbar/Navbar';
 
 function App() {
