@@ -4,7 +4,7 @@ import { Flex, useColorMode } from '@chakra-ui/react'
 export const NavBar = () => {
     const colorMode = localStorage.getItem('chakra-ui-color-mode')
     const { toggleColorMode } = useColorMode()
-    const ColorModeToggle = () => {
+    const ColorModeToggleButton = () => {
         if (colorMode === 'dark') {
             return <SunIcon focusable onClick={toggleColorMode} />
         }
@@ -13,7 +13,7 @@ export const NavBar = () => {
         }
     }
     return (
-        <Flex bg='transparent' position='fixed' zIndex='1' top='0' h='4vh'><ColorModeToggle /></Flex>
+        <Flex bg='transparent' position='fixed' zIndex='1' top='0' h='4vh'><ColorModeToggleButton /></Flex>
 
     )
 }

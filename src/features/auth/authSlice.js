@@ -38,7 +38,7 @@ const authSlice = createSlice({
     extraReducers: (builder) => builder.addCase(requestLogin.pending, (state) => {
         state.login.status = 'pending'
     }).addCase(requestLogin.fulfilled, (state, action) => {
-        state.auth.token = action.payload
+        state.auth.token = action.payload.token
         state.auth.status = 'logged-in'
         state.login.status = 'idle'
     }).addCase(requestLogin.rejected, (state, action) => {

@@ -8,7 +8,7 @@ export const LoginPage = () => {
   //local state
   const [username, setUsername] = useState('')
   const [passphrase, setPassphrase] = useState('')
-  const url = '/api/login'
+  const url = 'http://localhost:8000/api/login'
   //colors
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
   const pageBg = useColorModeValue('#87E0E1', '#5A8D98')
