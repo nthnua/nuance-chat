@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { client } from '../api/client';
 const initialState = {
     data: '',
-    status: 'idle'
+    status: 'idle',
+    error: {}
 }
 
 export const fetchChat = createAsyncThunk(
@@ -22,6 +23,9 @@ const loungeSlice = createSlice({
     }).addCase(fetchChat.fulfilled, (state, action) => {
         state.status = 'idle'
         state.data = action.payload
+    }).addCase(fetchChat.rejected, (state, action) => {
+        state.status = 'idle'
+        state.error = action.error
     })
 })
 
