@@ -7,7 +7,7 @@ import { requestLogin } from '../authSlice'
 export const LoginPage = () => {
   //local state
   const [username, setUsername] = useState('')
-  const [passphrase, setPassphrase] = useState('')
+  const [password, setPassword] = useState('')
   const url = 'http://localhost:8000/api/login'
   //colors
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
@@ -18,7 +18,7 @@ export const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    dispatch(requestLogin({ url, username, passphrase }))
+    dispatch(requestLogin({ url, username, password }))
   }
   return (
     <Flex w='100vw' h='100vh' bgSize='cover' bgColor={pageBg} align='center' justify='center'>
@@ -34,9 +34,9 @@ export const LoginPage = () => {
           </FormControl>
           <FormControl isRequired>
             <FormLabel>
-              Passphrase
+              Password
             </FormLabel>
-            <Input type='password' value={passphrase} onChange={e => setPassphrase(e.target.value)} />
+            <Input type='password' value={password} onChange={e => setPassword(e.target.value)} />
           </FormControl>
 
           <Button colorScheme='teal' alignSelf='flex-start' type='submit' >Login<ArrowForwardIcon mx='2'></ArrowForwardIcon></Button>

@@ -35,9 +35,9 @@ const initialState = auth
 export const requestLogin = createAsyncThunk(
     'auth/requestLogin',
     //return acton for fulfilled case
-    ({ url, username, passphrase }) => client.post(url, {
+    ({ url, username, password }) => client.post(url, {
         username,
-        passphrase
+        password
     })
 )
 
