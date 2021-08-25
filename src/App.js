@@ -3,24 +3,20 @@ import { useSelector } from 'react-redux';
 import { HashRouter, Redirect, Route } from 'react-router-dom';
 import { LoginPage } from './features/auth/login/Login';
 import { NavBar } from './features/navbar/Navbar';
+import { Lounge } from './features/lounge/Lounge'
 
 function App() {
-
-  const auth_token = useSelector(state => state.auth.token)
-  console.log(auth_token)
-  if (!auth_token) {
+  const login_status = useSelector(state => state.auth.session.status)
+  if (login_status === 'logged-out') {
     return (<LoginPage></LoginPage>)
   }
-
-  return (
-    <HashRouter>
-      <NavBar></NavBar>
-      <Route path='/login'>
-        <LoginPage></LoginPage>
-      </Route>
-      <Route path='/'><Redirect to='/login' /></Route>
-    </HashRouter>
-  );
+  else if (login_status === 'logged-in')
+    return (
+      <HashRouter>
+        <NavBar></NavBar>
+        <Lounge></Lounge>
+      </HashRouter>
+    );
 }
 
 export default App;
