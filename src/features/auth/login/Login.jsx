@@ -5,16 +5,16 @@ import { useDispatch } from 'react-redux'
 import { requestLogin } from '../authSlice'
 
 export const LoginPage = () => {
-  //local state
+  // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const url = 'http://localhost:8000/api/login'
-  //colors
+  // colors
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
   const pageBg = useColorModeValue('#87E0E1', '#5A8D98')
-  //redux dispatcher
+  // redux dispatcher
   const dispatch = useDispatch()
-  //handle form submission
+  // handle form submission
   const handleSubmit = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -39,10 +39,10 @@ export const LoginPage = () => {
             <Input fontSize={['md', null, 'lg']} type='password' value={password} onChange={e => setPassword(e.target.value)} />
           </FormControl>
 
-          <Button fontSize={['md', null, 'lg']} colorScheme='teal' alignSelf='flex-start' type='submit' >Login<ArrowForwardIcon mx='2'></ArrowForwardIcon></Button>
+          <Button fontSize={['md', null, 'lg']} colorScheme='teal' alignSelf='flex-start' type='submit'>Login<ArrowForwardIcon mx='2' /></Button>
 
         </Flex>
       </form>
-    </Flex >
+    </Flex>
   )
 }
