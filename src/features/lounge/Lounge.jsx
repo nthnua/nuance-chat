@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ContactList from './ContactList'
 import { fetchChat } from './loungeSlice'
 
 export const Lounge = () => {
@@ -8,8 +9,6 @@ export const Lounge = () => {
     const url = 'http://localhost:8000/api/lounge'
     useEffect(() => {
         dispatch(fetchChat({ url, auth_token }))
-    })
-    return <h1>Success!
-        here's the token
-    </h1>
+    }, [url, auth_token, dispatch])
+    return (<ContactList/>)
 }

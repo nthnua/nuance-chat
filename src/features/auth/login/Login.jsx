@@ -23,23 +23,23 @@ export const LoginPage = () => {
   return (
     <Flex w='100vw' h='100vh' bgSize='cover' bgColor={pageBg} align='center' justify='center'>
       <form onSubmit={handleSubmit}>
-        <Flex p='8' m='0' w={'sm'} h='xl' bgColor={loginPromptBg} borderRadius='base' flexDir='column' justify='space-around'>
+        <Flex p='8' m='0' w='sm' h='xl' bgColor={loginPromptBg} borderRadius='base' flexDir='column' justify='space-around'>
           <Heading>Hi there!</Heading>
-          <Text>Good to see you again</Text>
+          <Text fontSize={['md', null, 'lg']}>Good to see you again</Text>
           <FormControl isRequired>
-            <FormLabel>
+            <FormLabel fontSize={['md', null, 'lg']}>
               Username
             </FormLabel>
-            <Input type='username' value={username} onChange={e => setUsername(e.target.value)} />
+            <Input fontSize={['md', null, 'lg']} type='username' value={username} onChange={e => setUsername(e.target.value)} />
           </FormControl>
           <FormControl isRequired>
-            <FormLabel>
+            <FormLabel fontSize={['md', null, 'lg']}>
               Password
             </FormLabel>
-            <Input type='password' value={password} onChange={e => setPassword(e.target.value)} />
+            <Input fontSize={['md', null, 'lg']} type='password' value={password} onChange={e => setPassword(e.target.value)} />
           </FormControl>
 
-          <Button colorScheme='teal' alignSelf='flex-start' type='submit' >Login<ArrowForwardIcon mx='2'></ArrowForwardIcon></Button>
+          <Button fontSize={['md', null, 'lg']} colorScheme='teal' alignSelf='flex-start' type='submit' >Login<ArrowForwardIcon mx='2'></ArrowForwardIcon></Button>
 
         </Flex>
       </form>
