@@ -4,17 +4,13 @@ import Contact from './Contact'
 
 const ContactList = ({ connect }) => {
   const contacts = useSelector(state => state.lounge.contacts)
-  const CL = contacts.map((contact, id) => {
-    if (id % 2) {
-      return <>
-        <Divider orientation='horizontal'></Divider>
-        <Contact key={id} connect={connect} name={contact.name} peerId={contact.peerId} />
-      </>
-    }
-    return <Contact key={id} connect={connect} name={contact.name} peerId={contact.peerId} />
-  })
+  const CL = contacts.map((contact, id) => <div key={`p_${id}`}>
+    <Divider key={`d_${id}`} orientation='horizontal' />
+    <Contact key={id} connect={connect} id={contact.id} name={contact.name} peerId={contact.peerId} />
+  </div>
+  )
   return (
-    <Flex flexDir='column' h='100vh' w='xs'>{CL}</Flex>)
+    <Flex overflowY='scroll' flexDir='column' h='93vh' w='xs'>{CL}</Flex>)
 }
 
 export default ContactList

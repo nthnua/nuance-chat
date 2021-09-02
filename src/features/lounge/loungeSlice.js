@@ -4,7 +4,8 @@ const initialState = {
   contacts: [],
   status: 'idle',
   error: {},
-  activeChat: ''
+  activeChat: '',
+  activeChats: []
 }
 
 export const fetchChat = createAsyncThunk(
@@ -16,11 +17,9 @@ export const fetchChat = createAsyncThunk(
   })
 )
 
-export const sendPeerId = createAsyncThunk(
-  'lounge/sendPeerId',
-  ({ url, authToken, peerId }) => client.post(url, {
-    peerId
-  }, {
+export const getChatList = createAsyncThunk(
+  'lounge/getChatList',
+  ({ url, authToken, id }) => client.get(url, {
     headers: {
       Authorization: authToken
     }
@@ -43,15 +42,18 @@ const loungeSlice = createSlice({
   }).addCase(fetchChat.rejected, (state, action) => {
     state.status = 'idle'
     state.error = action.error
-  }).addCase(sendPeerId.pending, (state) => {
+  }).addCase(getChatList.pending, (state) => {
     state.status = 'pending'
-  }).addCase(sendPeerId.fulfilled, (state, action) => {
+  }).addCase(getChatList.fulfilled, (state, action) => {
     state.status = 'idle'
-    state.connection = action.payload
-  }).addCase(sendPeerId.rejected, (state, action) => {
+    state.activeChats = action.payload.chats
+  }).addCase(getChatList.rejected, (state, action) => {
     state.status = 'idle'
     state.error = action.error
   })
+
 })
+
+export const { setActiveChat } = loungeSlice.actions
 
 export default loungeSlice.reducer

@@ -52,7 +52,7 @@ export const Lounge = () => {
     }, 2000)
   }
 
-  return (<Flex w='100%' h='100%' direction='row'>    <ContactList connect={connectToPeer} />
+  return (<Flex w='100%' overflow='hidden' direction='row'>    <ContactList connect={connectToPeer} />
     <ChatPane /></Flex>
   )
 }

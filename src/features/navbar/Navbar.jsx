@@ -14,7 +14,7 @@ export const NavBar = () => {
     }
   }
   return (
-    <Flex p='4' bg={bgColor} flexDir='row-reverse' position='static' top='0' w='100%'><Text fontSize='lg' px='2' position='absolute' left='0'>Rinsme</Text><ColorModeToggleButton /></Flex>
+    <Flex p='4' bg={bgColor} flexDir='row-reverse' h='7vh' position='sticky' zIndex='sticky' top='0' w='100%'><Text fontSize='lg' px='2' position='absolute' left='0'>Rinsme</Text><ColorModeToggleButton /></Flex>
 
   )
 }
