@@ -8,9 +8,9 @@ const initialState = {
 
 export const fetchChat = createAsyncThunk(
   'lounge/fetchChat',
-  ({ url, auth_token }) => client.get(url, {
+  ({ url, authToken }) => client.get(url, {
     headers: {
-      Authorization: auth_token
+      Authorization: authToken
     }
   })
 )
