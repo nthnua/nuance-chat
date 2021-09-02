@@ -1,10 +1,13 @@
 import { Flex, Text, Icon, Avatar } from '@chakra-ui/react'
 import { IoMdContact } from 'react-icons/io'
 
-const Contact = ({ name }) => {
-  console.log(name)
+const Contact = ({ name, connect, peerId }) => {
+
   return (
-    <Flex cursor='pointer' align='center' fontSize='lg' borderRadius='md' bg='teal.100' p='2' h='14'>
+    <Flex onClick={() => {
+      connect({ peerId })
+    }}
+      cursor='pointer' align='center' fontSize='lg' borderRadius='md' p='2' h='14'>
       <Avatar>
         <Icon m='4' as={IoMdContact} w='12' h='12' />
       </Avatar>
