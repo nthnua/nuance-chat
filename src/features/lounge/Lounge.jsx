@@ -7,7 +7,7 @@ import { fetchChat } from './loungeSlice'
 export const Lounge = () => {
   const dispatch = useDispatch()
   const authToken = useSelector(state => state.auth.session.token)
-  const id = useSelector(state => state.auth.session.id)
+  const id = useSelector(state => state.auth.session.peerId)
   const url = 'http://localhost:8000/api/lounge'
   const peer = new Peer(id, {
     host: 'localhost',
