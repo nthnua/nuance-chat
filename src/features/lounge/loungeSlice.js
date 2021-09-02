@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { client } from '../api/client'
 const initialState = {
   contacts: [],
-  connection: '',
   status: 'idle',
-  error: {}
+  error: {},
+  activeChat: ''
 }
 
 export const fetchChat = createAsyncThunk(
@@ -30,6 +30,11 @@ export const sendPeerId = createAsyncThunk(
 const loungeSlice = createSlice({
   name: 'lounge',
   initialState,
+  reducers: {
+    setActiveChat: (state, action) => {
+      state.activeChat = action.payload
+    }
+  },
   extraReducers: builder => builder.addCase(fetchChat.pending, (state) => {
     state.status = 'pending'
   }).addCase(fetchChat.fulfilled, (state, action) => {

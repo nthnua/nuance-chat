@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
 import { fetchChat } from './loungeSlice'
 import Peer from 'peerjs'
+import ChatPane from './ChatPane'
+import { Flex } from '@chakra-ui/react'
+
 export const Lounge = () => {
   // store peer object in state
   const [peer, initPeer] = useState(null)
@@ -31,16 +34,25 @@ export const Lounge = () => {
       //When someone connects
       peer.on('connection', (conn) => {
         console.log('Got connection', conn)
-        conn.on('open', (test) => {
-          console.log(test)
+        conn.on('open', () => {
+          conn.on('data', (data) => {
+            console.log(data)
+          })
         })
+
       })
     }
   }, [peer])
   const connectToPeer = ({ peerId }) => {
     //expected to call after peer gets initailized
     const conn = peer.connect(peerId)
+    setTimeout(() => {
+      console.log('ss')
+      conn.send('hey')
+    }, 2000)
   }
 
-  return <ContactList connect={connectToPeer} />
+  return (<Flex w='100%' h='100%' direction='row'>    <ContactList connect={connectToPeer} />
+    <ChatPane /></Flex>
+  )
 }
