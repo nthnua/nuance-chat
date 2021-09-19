@@ -35,7 +35,7 @@ export const Lounge = () => {
   })
 
   return (
-    <Flex w='100%' overflow='hidden' direction='row'>
+    <Flex w='100%' direction='row'>
       <ContactList />
       <ChatPane socket={socket} />
     </Flex>

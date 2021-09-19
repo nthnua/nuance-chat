@@ -1,4 +1,4 @@
-import { Flex, Input, IconButton } from '@chakra-ui/react'
+import { Flex, Input, IconButton, useColorModeValue } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
@@ -12,6 +12,9 @@ const ChatPane = ({ socket }) => {
   const chatId = useSelector((state) => state.lounge.activeChatMeta.id)
   const peerId = useSelector((state) => state.lounge.activeChatMeta.peerId)
   const chats = useSelector((state) => state.lounge.activeChat)
+
+  const bubbleColor = useColorModeValue('#87E0E1', '#5A8D98')
+
   // const [connection, setConnection] = useState(null);
   const [message, setMessage] = useState('')
   const [chatBubbles, setChatBubbles] = useState([])
@@ -32,10 +35,11 @@ const ChatPane = ({ socket }) => {
           key={id}
           text={chat.content}
           sender={chat.sender === userId}
+          color={bubbleColor}
         />
       ))
     )
-  }, [chats, userId])
+  }, [chats, userId, bubbleColor])
 
   // useEffect(() => {
   //   if (connection) {
@@ -68,16 +72,16 @@ const ChatPane = ({ socket }) => {
   }
 
   return (
-    <Flex justify='end' flexDir='column' grow='1'>
+    <Flex justify='end' flexDir='column' h='100vh' grow='1' >
       {chatBubbles}
       <form onSubmit={handleSubmit}>
-        <Flex p='2'>
+        <Flex p='2' >
           <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             mx='1'
           />
-          <IconButton type='submit' mx='1' icon={<IoSend />} />
+          <IconButton colorScheme='teal' type='submit' mx='1' icon={<IoSend />} />
         </Flex>
       </form>
     </Flex>

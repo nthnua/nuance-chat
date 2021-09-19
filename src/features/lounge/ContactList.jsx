@@ -1,5 +1,6 @@
 import { Divider, Flex } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
+import { ContactsNavbar } from '../navbars/Contacts'
 import Contact from './Contact'
 
 const ContactList = () => {
@@ -11,7 +12,12 @@ const ContactList = () => {
     </div>)
   )
   return (
-    <Flex overflowY='scroll' flexDir='column' h='93vh' w='xs'>{CL}</Flex>)
+    <Flex flexDir='column'><ContactsNavbar />
+      <Flex overflowY='scroll' flexDir='column' h='100vh' w='xs'>
+        {CL}
+      </Flex>
+    </Flex>
+  )
 }
 
 export default ContactList
