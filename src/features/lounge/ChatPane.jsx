@@ -66,16 +66,15 @@ const ChatPane = ({ socket }) => {
       time: Date.now()
     }
     dispatch(addChat(data))
-    socket.emit('chat', data)
-
+    socket.emit('chatMessage', data)
     setMessage('')
   }
 
   return (
-    <Flex justify='end' flexDir='column' h='100vh' grow='1' >
+    <Flex justify='end' flexDir='column' h='100vh' grow='1'>
       {chatBubbles}
       <form onSubmit={handleSubmit}>
-        <Flex p='2' >
+        <Flex p='2'>
           <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}

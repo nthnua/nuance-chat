@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
-import { fetchContacts } from './loungeSlice'
+import { fetchContacts, socketConnected } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex } from '@chakra-ui/react'
 import { io } from 'socket.io-client'
@@ -23,7 +23,11 @@ export const Lounge = () => {
   useEffect(() => {
     if (socket) {
       socket.on('connect', () => {
-        console.log('Socket connected!', socket.id)
+        dispatch(socketConnected({
+          url,
+          authToken,
+          socketId: socket.id
+        }))
       })
       socket.onAny((event, ...args) => {
         console.log(`got ${event}`)
@@ -32,7 +36,7 @@ export const Lounge = () => {
         console.error(err)
       })
     }
-  })
+  }, [socket, dispatch, url, authToken])
 
   return (
     <Flex w='100%' direction='row'>

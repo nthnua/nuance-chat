@@ -55,7 +55,6 @@ const authSlice = createSlice({
     state.session.token = action.payload.token
     state.session.status = 'logged-in'
     state.session.id = action.payload.id
-    state.session.peerId = action.payload.peerId
     state.login.status = 'idle'
     // when login store in localstorage
     localStorage.setItem('auth', JSON.stringify(state))

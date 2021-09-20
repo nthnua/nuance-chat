@@ -4,6 +4,10 @@ const initialState = {
   contacts: [],
   status: 'idle',
   error: {},
+  socket: {
+    id: '',
+    status: ''
+  },
   activeChatMeta: {
     id: '',
     peerId: ''
@@ -23,6 +27,17 @@ export const fetchContacts = createAsyncThunk(
 export const getChat = createAsyncThunk(
   'lounge/getChat',
   ({ url, authToken, id }) => client.get(url, {
+    headers: {
+      Authorization: authToken
+    }
+  })
+)
+
+export const socketConnected = createAsyncThunk(
+  'lounge/socketConnected',
+  ({ url, authToken, socketId }) => client.post(url, {
+    socketId
+  }, {
     headers: {
       Authorization: authToken
     }
@@ -57,6 +72,11 @@ const loungeSlice = createSlice({
   }).addCase(getChat.rejected, (state, action) => {
     state.status = 'idle'
     state.error = action.error
+  }).addCase(socketConnected.fulfilled, (state, action) => {
+    state.socket.id = action.payload.socketId
+  }).addCase(socketConnected.rejected, (state, action) => {
+    state.socket.status = action.meta
+    console.error('Error setting socketId', action.error)
   })
 
 })
