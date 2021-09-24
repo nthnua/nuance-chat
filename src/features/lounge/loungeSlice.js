@@ -8,10 +8,10 @@ const initialState = {
     id: '',
     status: ''
   },
-  activeChatMeta: {
-    id: '',
-    peerId: ''
-  },
+  // activeChatMeta: {
+  //   id: '',
+  //   peerId: ''
+  // },
   activeChat: []
 }
 
@@ -48,10 +48,10 @@ const loungeSlice = createSlice({
   name: 'lounge',
   initialState,
   reducers: {
-    setActiveChatMeta: (state, action) => {
-      state.activeChatMeta.id = action.payload.id
-      state.activeChatMeta.peerId = action.payload.peerId
-    },
+    // setActiveChatMeta: (state, action) => {
+    //   state.activeChatMeta.id = action.payload.id
+    //   state.activeChatMeta.peerId = action.payload.peerId
+    // },
     addChat: (state, action) => {
       state.activeChat = [...state.activeChat, action.payload]
     }
@@ -81,6 +81,6 @@ const loungeSlice = createSlice({
 
 })
 
-export const { setActiveChatMeta, addChat } = loungeSlice.actions
+export const { addChat } = loungeSlice.actions
 
 export default loungeSlice.reducer

@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
 import { addChat, getChat } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
+import { useParams } from 'react-router'
 
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
+  const { chatId } = useParams()
   const authToken = useSelector((state) => state.auth.session.token)
   const userId = useSelector((state) => state.auth.session.id)
-  const chatId = useSelector((state) => state.lounge.activeChatMeta.id)
-  const peerId = useSelector((state) => state.lounge.activeChatMeta.peerId)
   const chats = useSelector((state) => state.lounge.activeChat)
 
   const bubbleColor = useColorModeValue('#87E0E1', '#5A8D98')
@@ -26,7 +26,7 @@ const ChatPane = ({ socket }) => {
       dispatch(getChat({ url, authToken, id: chatId }))
       // setConnection(peer.connect(peerId));
     }
-  }, [chatId, dispatch, peerId, url, authToken, socket])
+  }, [chatId, dispatch, url, authToken, socket])
 
   useEffect(() => {
     setChatBubbles(

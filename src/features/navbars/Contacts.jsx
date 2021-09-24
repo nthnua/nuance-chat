@@ -7,6 +7,5 @@ export const ContactsNavbar = () => {
       <Text alignSelf='center'>Rinsme</Text>
       <Avatar />
     </Flex>
-
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { LoginPage } from './features/auth/login/Login'
 import { Lounge } from './features/lounge/Lounge'
 
@@ -10,9 +10,9 @@ function App () {
     return (<LoginPage />)
   } else if (loginStatus === 'logged-in') {
     return (
-      <HashRouter>
+      <BrowserRouter>
         <Lounge />
-      </HashRouter>
+      </BrowserRouter>
     )
   }
 }

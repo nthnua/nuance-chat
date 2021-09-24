@@ -1,11 +1,14 @@
 import { Flex, Text, Avatar } from '@chakra-ui/react'
-import { useDispatch } from 'react-redux'
-import { setActiveChatMeta } from './loungeSlice'
+// import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
+// import { setActiveChatMeta } from './loungeSlice'
 
 const Contact = ({ id, name, peerId }) => {
-  const dispatch = useDispatch()
+  const history = useHistory()
+  // const dispatch = useDispatch()
   const handleClick = () => {
-    dispatch(setActiveChatMeta({ id, peerId }))
+    history.push(`/chat/${id}`)
+    // dispatch(setActiveChatMeta({ id, peerId }))
   }
   return (
     <Flex

@@ -1,5 +1,4 @@
 import { Divider, Flex } from '@chakra-ui/react'
-import { useSelector } from 'react-redux'
 import { ContactsNavbar } from '../navbars/Contacts'
 import Contact from './Contact'
 

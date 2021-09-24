@@ -5,6 +5,7 @@ import { fetchContacts, socketConnected } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex } from '@chakra-ui/react'
 import { io } from 'socket.io-client'
+import { Route } from 'react-router'
 
 export const Lounge = () => {
   const dispatch = useDispatch()
@@ -30,11 +31,9 @@ export const Lounge = () => {
         }))
       })
       socket.on('chatMessage', data => {
-        console.log(data.sender, contacts)
         if (contacts.some(contact => contact.id === data.sender)) {
           console.log('yes')
-        }
-        else {
+        } else {
           console.log('no')
         }
       })
@@ -45,12 +44,14 @@ export const Lounge = () => {
         console.log(`got ${event}`)
       })
     }
-  }, [socket, dispatch, url, authToken])
+  }, [socket, dispatch, url, authToken, contacts])
 
   return (
     <Flex w='100%' direction='row'>
       <ContactList contacts={contacts} />
-      <ChatPane socket={socket} />
+      <Route path='/chat/:chatId'>
+        <ChatPane socket={socket} />
+      </Route>
     </Flex>
   )
 }
