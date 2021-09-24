@@ -8,14 +8,14 @@ import { io } from 'socket.io-client'
 
 export const Lounge = () => {
   const dispatch = useDispatch()
-  const authToken = useSelector((state) => state.auth.session.token)
+  const authToken = useSelector(state => state.auth.session.token)
+  const contacts = useSelector(state => state.lounge.contacts)
   const url = 'http://localhost:8000/api/lounge'
   const socket = io('http://localhost:8000', {
     auth: {
       token: authToken
     }
   })
-
   useEffect(() => {
     dispatch(fetchContacts({ url, authToken }))
   }, [authToken, dispatch, url])
@@ -29,18 +29,27 @@ export const Lounge = () => {
           socketId: socket.id
         }))
       })
-      socket.onAny((event, ...args) => {
-        console.log(`got ${event}`)
+      socket.on('chatMessage', data => {
+        console.log(data.sender, contacts)
+        if (contacts.some(contact => contact.id === data.sender)) {
+          console.log('yes')
+        }
+        else {
+          console.log('no')
+        }
       })
       socket.on('connect_error', (err) => {
         console.error(err)
+      })
+      socket.onAny((event, ...args) => {
+        console.log(`got ${event}`)
       })
     }
   }, [socket, dispatch, url, authToken])
 
   return (
     <Flex w='100%' direction='row'>
-      <ContactList />
+      <ContactList contacts={contacts} />
       <ChatPane socket={socket} />
     </Flex>
   )
