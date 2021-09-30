@@ -5,44 +5,44 @@ import { useDispatch } from 'react-redux'
 import { requestLogin } from '../authSlice'
 
 export const LoginPage = () => {
-  //local state
+  // local state
   const [username, setUsername] = useState('')
-  const [passphrase, setPassphrase] = useState('')
+  const [password, setPassword] = useState('')
   const url = 'http://localhost:8000/api/login'
-  //colors
+  // colors
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
   const pageBg = useColorModeValue('#87E0E1', '#5A8D98')
-  //redux dispatcher
+  // redux dispatcher
   const dispatch = useDispatch()
-  //handle form submission
+  // handle form submission
   const handleSubmit = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    dispatch(requestLogin({ url, username, passphrase }))
+    dispatch(requestLogin({ url, username, password }))
   }
   return (
     <Flex w='100vw' h='100vh' bgSize='cover' bgColor={pageBg} align='center' justify='center'>
       <form onSubmit={handleSubmit}>
-        <Flex p='8' m='0' w={'sm'} h='xl' bgColor={loginPromptBg} borderRadius='base' flexDir='column' justify='space-around'>
+        <Flex p='8' m='0' w='sm' h='xl' bgColor={loginPromptBg} borderRadius='base' flexDir='column' justify='space-around'>
           <Heading>Hi there!</Heading>
-          <Text>Good to see you again</Text>
+          <Text fontSize={['md', null, 'lg']}>Good to see you again</Text>
           <FormControl isRequired>
-            <FormLabel>
+            <FormLabel fontSize={['md', null, 'lg']}>
               Username
             </FormLabel>
-            <Input type='username' value={username} onChange={e => setUsername(e.target.value)} />
+            <Input fontSize={['md', null, 'lg']} type='username' value={username} onChange={e => setUsername(e.target.value)} />
           </FormControl>
           <FormControl isRequired>
-            <FormLabel>
-              Passphrase
+            <FormLabel fontSize={['md', null, 'lg']}>
+              Password
             </FormLabel>
-            <Input type='password' value={passphrase} onChange={e => setPassphrase(e.target.value)} />
+            <Input fontSize={['md', null, 'lg']} type='password' value={password} onChange={e => setPassword(e.target.value)} />
           </FormControl>
 
-          <Button colorScheme='teal' alignSelf='flex-start' type='submit' >Login<ArrowForwardIcon mx='2'></ArrowForwardIcon></Button>
+          <Button fontSize={['md', null, 'lg']} colorScheme='teal' alignSelf='flex-start' type='submit'>Login<ArrowForwardIcon mx='2' /></Button>
 
         </Flex>
       </form>
-    </Flex >
+    </Flex>
   )
 }

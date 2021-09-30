@@ -1,8 +1,47 @@
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ContactList from './ContactList'
+import { fetchContacts, socketConnected } from './loungeSlice'
+import ChatPane from './ChatPane'
+import { Flex } from '@chakra-ui/react'
+import { io } from 'socket.io-client'
 
 export const Lounge = () => {
-    const auth_token = useSelector(state => state.auth.session.token)
-    return <h1>Success!
-        here's the token {auth_token}
-    </h1>
+  const dispatch = useDispatch()
+  const authToken = useSelector((state) => state.auth.session.token)
+  const url = 'http://localhost:8000/api/lounge'
+  const socket = io('http://localhost:8000', {
+    auth: {
+      token: authToken
+    }
+  })
+
+  useEffect(() => {
+    dispatch(fetchContacts({ url, authToken }))
+  }, [authToken, dispatch, url])
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {
+        dispatch(socketConnected({
+          url,
+          authToken,
+          socketId: socket.id
+        }))
+      })
+      socket.onAny((event, ...args) => {
+        console.log(`got ${event}`)
+      })
+      socket.on('connect_error', (err) => {
+        console.error(err)
+      })
+    }
+  }, [socket, dispatch, url, authToken])
+
+  return (
+    <Flex w='100%' direction='row'>
+      <ContactList />
+      <ChatPane socket={socket} />
+    </Flex>
+  )
 }
