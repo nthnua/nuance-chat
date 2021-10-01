@@ -3,12 +3,14 @@ import { Button, Flex, FormControl, FormLabel, Input, useColorModeValue, Text, H
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { requestLogin } from '../authSlice'
+import { backendUrl } from '../../../env'
 
 export const LoginPage = () => {
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const url = 'http://localhost:8000/api/login'
+  const baseUrl = backendUrl || 'http://localhost:8000'
+  const url = `${baseUrl}/api/login`
   // colors
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
   const pageBg = useColorModeValue('#87E0E1', '#5A8D98')

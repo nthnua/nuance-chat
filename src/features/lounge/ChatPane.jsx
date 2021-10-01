@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
 import { addChat, getChat } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
+import { useParams } from 'react-router'
+import { backendUrl } from '../../env'
 
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
+  const { chatId } = useParams()
   const authToken = useSelector((state) => state.auth.session.token)
   const userId = useSelector((state) => state.auth.session.id)
-  const chatId = useSelector((state) => state.lounge.activeChatMeta.id)
-  const peerId = useSelector((state) => state.lounge.activeChatMeta.peerId)
   const chats = useSelector((state) => state.lounge.activeChat)
 
   const bubbleColor = useColorModeValue('#87E0E1', '#5A8D98')
@@ -19,14 +20,16 @@ const ChatPane = ({ socket }) => {
   const [message, setMessage] = useState('')
   const [chatBubbles, setChatBubbles] = useState([])
 
-  const url = 'http://localhost:8000/api/chats/' + chatId
+  const baseUrl = backendUrl || 'http://localhost:8000'
+  const url = `${baseUrl}/api/chats/${chatId}`
+
   useEffect(() => {
     if (chatId && socket) {
       // get the chat for the contact and connect to the peer
       dispatch(getChat({ url, authToken, id: chatId }))
       // setConnection(peer.connect(peerId));
     }
-  }, [chatId, dispatch, peerId, url, authToken, socket])
+  }, [chatId, dispatch, url, authToken, socket])
 
   useEffect(() => {
     setChatBubbles(
