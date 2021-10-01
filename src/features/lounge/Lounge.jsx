@@ -6,13 +6,15 @@ import ChatPane from './ChatPane'
 import { Flex } from '@chakra-ui/react'
 import { io } from 'socket.io-client'
 import { Route } from 'react-router'
+import { backendUrl } from '../../env'
 
 export const Lounge = () => {
   const dispatch = useDispatch()
   const authToken = useSelector(state => state.auth.session.token)
   const contacts = useSelector(state => state.lounge.contacts)
-  const url = 'http://localhost:8000/api/lounge'
-  const socket = io('http://localhost:8000', {
+  const baseUrl = backendUrl || 'http://localhost:8000'
+  const url = `${baseUrl}/api/lounge`
+  const socket = io(baseUrl, {
     auth: {
       token: authToken
     }

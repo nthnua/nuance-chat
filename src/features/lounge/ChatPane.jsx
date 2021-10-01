@@ -5,6 +5,7 @@ import ChatBubble from './ChatBubble'
 import { addChat, getChat } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
 import { useParams } from 'react-router'
+import { backendUrl } from '../../env'
 
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
@@ -19,7 +20,9 @@ const ChatPane = ({ socket }) => {
   const [message, setMessage] = useState('')
   const [chatBubbles, setChatBubbles] = useState([])
 
-  const url = 'http://localhost:8000/api/chats/' + chatId
+  const baseUrl = backendUrl || 'http://localhost:8000'
+  const url = `${baseUrl}/api/chats/${chatId}`
+
   useEffect(() => {
     if (chatId && socket) {
       // get the chat for the contact and connect to the peer
