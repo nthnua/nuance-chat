@@ -7,11 +7,13 @@ const ContactList = ({ contacts }) => {
   const selfId = useSelector(state => state.auth.session.id)
 
   const CL = contacts.map((contact, id) => (
-    contact.id === selfId ? null :
-      <div key={`p_${id}`}>
+    contact.id === selfId
+      ? null
+      : <div key={`p_${id}`}>
         <Divider key={`d_${id}`} orientation='horizontal' />
         <Contact key={id} id={contact.id} name={contact.name} peerId={contact.peerId} />
-      </div>)
+      </div>
+  )
   )
   return (
     <Flex flexDir='column'><ContactsNavbar />

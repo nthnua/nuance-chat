@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
-import { addChat, fetchContacts, socketConnected } from './loungeSlice'
+import { addChat, fetchContacts, socketConnected, addContact } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex } from '@chakra-ui/react'
 import { io } from 'socket.io-client'
@@ -12,6 +12,8 @@ export const Lounge = () => {
   const dispatch = useDispatch()
   const authToken = useSelector(state => state.auth.session.token)
   const contacts = useSelector(state => state.lounge.contacts)
+  const contactsStatus = useSelector(state => state.lounge.contactsStatus)
+  // const chatId = useSelector(state => state.lounge.activeChatMeta.id)
   const baseUrl = backendUrl || 'http://localhost:8000'
   const url = `${baseUrl}/api/lounge`
   const socket = io(baseUrl, {
@@ -24,6 +26,11 @@ export const Lounge = () => {
   }, [authToken, dispatch, url])
 
   useEffect(() => {
+    if (contactsStatus === 'loaded' && socket) {
+      socket.emit('Connected')
+    }
+  }, [contactsStatus, socket])
+  useEffect(() => {
     if (socket) {
       socket.on('connect', () => {
         dispatch(socketConnected({
@@ -32,17 +39,27 @@ export const Lounge = () => {
           socketId: socket.id
         }))
       })
-      socket.on('chatMessage', data => {
+
+      socket.on('messageDelivery', ({ mId, status }) => {
+        status === 1 ? console.log('Sent') : console.log('Delivered')
+      })
+      socket.on('chatMessage', (data) => {
         if (contacts.some(contact => contact.id === data.sender)) {
           console.log('yes')
-        }
-        else {
-          contacts.push({
+          console.log(data)
+          dispatch(addChat({
+            chatId: data.sender,
+            data
+          }))
+        } else {
+          dispatch(addContact({
             id: data.sender,
-            name: 'Joe'
-          })
+            name: 'Joe',
+            chats: [data]
+          }))
         }
       })
+
       socket.on('connect_error', (err) => {
         console.error(err)
       })

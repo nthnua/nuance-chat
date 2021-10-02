@@ -2,7 +2,7 @@ import { Flex, Input, IconButton, useColorModeValue } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
-import { addChat, getActiveChat, getChat } from './loungeSlice'
+import { addChat, getActiveChat } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
 import { useParams } from 'react-router'
 import { backendUrl } from '../../env'
@@ -26,7 +26,7 @@ const ChatPane = ({ socket }) => {
   useEffect(() => {
     if (chatId && socket) {
       // get the chat for the contact and connect to the peer
-      //dispatch(getChat({ url, authToken, id: chatId }))
+      // dispatch(getChat({ url, authToken, id: chatId }))
       dispatch(getActiveChat({ chatId }))
       // setConnection(peer.connect(peerId));
     }
@@ -58,16 +58,9 @@ const ChatPane = ({ socket }) => {
   //     });
   //   }
   // }, [connection]);
-  useEffect(() => {
-
-    socket.on('messageDelivery', ({ mId, status }) => {
-      status === 1 ? console.log('Sent') : console.log('Delivered')
-    })
-    socket.on('chatMessage', (data) => {
-      dispatch(addChat({ chatId, data }))
-    })
-
-  }, [socket, chatId, dispatch])
+  // useEffect(() => {
+  //   dispatch(setActiveChatMeta({ chatId }))
+  // }, [chatId, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault()
