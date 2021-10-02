@@ -35,13 +35,13 @@ export const Lounge = () => {
       socket.on('chatMessage', data => {
         if (contacts.some(contact => contact.id === data.sender)) {
           console.log('yes')
-        } else {
+        }
+        else {
           contacts.push({
             id: data.sender,
             name: 'Joe'
           })
         }
-        dispatch(addChat(data))
       })
       socket.on('connect_error', (err) => {
         console.error(err)

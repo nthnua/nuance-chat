@@ -53,7 +53,18 @@ const loungeSlice = createSlice({
     //   state.activeChatMeta.peerId = action.payload.peerId
     // },
     addChat: (state, action) => {
-      state.activeChat = [...state.activeChat, action.payload]
+      state.contacts.forEach((contact, idx) => {
+        if (contact.id === action.payload.chatId) {
+          contact.chats = [...contact.chats, action.payload.data]
+        }
+      })
+    },
+    getActiveChat: (state, action) => {
+      state.contacts.forEach((contact) => {
+        if (contact.id === action.payload.chatId) {
+          state.activeChat = contact.chats
+        }
+      })
     }
   },
   extraReducers: builder => builder.addCase(fetchContacts.pending, (state) => {
@@ -81,6 +92,6 @@ const loungeSlice = createSlice({
 
 })
 
-export const { addChat } = loungeSlice.actions
+export const { addChat, getActiveChat } = loungeSlice.actions
 
 export default loungeSlice.reducer
