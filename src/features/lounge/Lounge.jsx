@@ -43,7 +43,15 @@ export const Lounge = () => {
       socket.on('messageDelivery', ({ mId, status }) => {
         status === 1 ? console.log('Sent') : console.log('Delivered')
       })
-      socket.on('chatMessage', (data) => {
+      socket.on('chatMessage', data => {
+        //trusting the client to say the truth
+        //if client lies then some other message's status can be manipulated with bruteforce
+        //as mId is hard to guess
+        socket.emit('deliveryReport', {
+          mId: data.mID,
+          sender: data.sender,
+          status: 2
+        })
         if (contacts.some(contact => contact.id === data.sender)) {
           console.log('yes')
           console.log(data)

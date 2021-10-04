@@ -67,14 +67,16 @@ const ChatPane = ({ socket }) => {
     e.stopPropagation()
     // send message
     const data = {
-      mId: Math.random() * 100000,
       sender: userId,
       reciever: chatId,
       content: message,
-      time: Date.now()
+      time: Date.now(),
+      status: 0
     }
     dispatch(addChat({ chatId, data }))
-    socket.emit('chatMessage', data)
+    socket.emit('chatMessage', data, (recievedData) => {
+      console.log(recievedData)
+    })
     setMessage('')
   }
 
