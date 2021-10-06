@@ -40,15 +40,16 @@ export const Lounge = () => {
         }))
       })
 
-      socket.on('messageDelivery', ({ mId, status }) => {
+      socket.on('messageDelivery', ({ _id, status }) => {
         status === 1 ? console.log('Sent') : console.log('Delivered')
       })
       socket.on('chatMessage', data => {
-        //trusting the client to say the truth
-        //if client lies then some other message's status can be manipulated with bruteforce
-        //as mId is hard to guess
+        // trusting the client to say the truth
+        // if client lies then some other message's status can be manipulated with bruteforce
+        // as _id is hard to guess
+        console.log(data._id)
         socket.emit('deliveryReport', {
-          mId: data.mID,
+          _id: data._id,
           sender: data.sender,
           status: 2
         })
