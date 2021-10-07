@@ -40,8 +40,14 @@ export const Lounge = () => {
         }))
       })
 
-      socket.on('messageDelivery', ({ _id, status }) => {
+      socket.on('messageDelivery', ({ _id, status }, fn) => {
         status === 1 ? console.log('Sent') : console.log('Delivered')
+        if (typeof (fn) === 'function') {
+          fn({
+            _id,
+            status: 3
+          })
+        }
       })
       socket.on('chatMessage', data => {
         // trusting the client to say the truth
