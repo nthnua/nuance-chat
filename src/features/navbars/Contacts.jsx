@@ -1,11 +1,20 @@
-import { Flex, Text, useColorModeValue, Avatar } from '@chakra-ui/react'
-
+import { Flex, useColorModeValue, Avatar } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/layout";
 export const ContactsNavbar = () => {
-  const bgColor = useColorModeValue('#87E0E1', '#5A8D98')
+  const bgColor = useColorModeValue("#87E0E1", "#5A8D98");
   return (
-    <Flex p='2' bg={bgColor} justify='space-between' flexDir='row' h='min-content' position='sticky' zIndex='sticky' top='0' w='100%'>
-      <Text alignSelf='center'>Rinsme</Text>
+    <Flex
+      p="2"
+      px="4"
+      bg={bgColor}
+      justify="space-between"
+      flexDir="row"
+      shadow="0 2px 10px 1px rgba(0,0,0,0.15)"
+    >
+      <Heading contentEditable size="sm" alignSelf="center">
+        Not John Doe
+      </Heading>
       <Avatar />
     </Flex>
-  )
-}
+  );
+};
