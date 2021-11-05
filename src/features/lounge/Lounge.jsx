@@ -1,101 +1,101 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ContactList from "./ContactList";
-import { addChat, fetchContacts, socketConnected, addContact } from "./loungeSlice";
-import ChatPane from "./ChatPane";
-import { Flex } from "@chakra-ui/react";
-import { io } from "socket.io-client";
-import { Route } from "react-router";
-import { backendUrl } from "../../env";
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ContactList from './ContactList'
+import { addChat, fetchContacts, socketConnected, addContact } from './loungeSlice'
+import ChatPane from './ChatPane'
+import { Flex } from '@chakra-ui/react'
+import { io } from 'socket.io-client'
+import { Route } from 'react-router'
+import { backendUrl } from '../../env'
 
 export const Lounge = () => {
-  const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.auth.session.token);
-  const contacts = useSelector((state) => state.lounge.contacts);
-  const contactsStatus = useSelector((state) => state.lounge.contactsStatus);
+  const dispatch = useDispatch()
+  const authToken = useSelector((state) => state.auth.session.token)
+  const contacts = useSelector((state) => state.lounge.contacts)
+  const contactsStatus = useSelector((state) => state.lounge.contactsStatus)
   // const chatId = useSelector(state => state.lounge.activeChatMeta.id)
-  const baseUrl = backendUrl || "http://localhost:8000";
-  const url = `${baseUrl}/api/lounge`;
+  const baseUrl = backendUrl || 'http://localhost:8000'
+  const url = `${baseUrl}/api/lounge`
   const socket = io(baseUrl, {
     auth: {
-      token: authToken,
-    },
-  });
+      token: authToken
+    }
+  })
   useEffect(() => {
-    dispatch(fetchContacts({ url, authToken }));
-  }, [authToken, dispatch, url]);
+    dispatch(fetchContacts({ url, authToken }))
+  }, [authToken, dispatch, url])
 
   useEffect(() => {
-    if (contactsStatus === "loaded" && socket) {
-      socket.emit("Connected");
+    if (contactsStatus === 'loaded' && socket) {
+      socket.emit('Connected')
     }
-  }, [contactsStatus, socket]);
+  }, [contactsStatus, socket])
   useEffect(() => {
     if (socket) {
-      socket.on("connect", () => {
+      socket.on('connect', () => {
         dispatch(
           socketConnected({
             url,
             authToken,
-            socketId: socket.id,
+            socketId: socket.id
           })
-        );
-      });
+        )
+      })
 
-      socket.on("messageDelivery", ({ _id, status }, fn) => {
-        status === 1 ? console.log("Sent") : console.log("Delivered");
-        if (typeof fn === "function") {
+      socket.on('messageDelivery', ({ _id, status }, fn) => {
+        status === 1 ? console.log('Sent') : console.log('Delivered')
+        if (typeof fn === 'function') {
           fn({
             _id,
-            status: 3,
-          });
+            status: 3
+          })
         }
-      });
-      socket.on("chatMessage", (data) => {
+      })
+      socket.on('chatMessage', (data) => {
         // trusting the client to say the truth
         // if client lies then some other message's status can be manipulated with bruteforce
         // as _id is hard to guess
-        console.log(data._id);
-        socket.emit("deliveryReport", {
+        console.log(data._id)
+        socket.emit('deliveryReport', {
           _id: data._id,
           sender: data.sender,
-          status: 2,
-        });
+          status: 2
+        })
         if (contacts.some((contact) => contact.id === data.sender)) {
-          console.log("yes");
-          console.log(data);
+          console.log('yes')
+          console.log(data)
           dispatch(
             addChat({
               chatId: data.sender,
-              data,
+              data
             })
-          );
+          )
         } else {
           dispatch(
             addContact({
               id: data.sender,
-              name: "Joe",
-              chats: [data],
+              name: 'Joe',
+              chats: [data]
             })
-          );
+          )
         }
-      });
+      })
 
-      socket.on("connect_error", (err) => {
-        console.error(err);
-      });
+      socket.on('connect_error', (err) => {
+        console.error(err)
+      })
       socket.onAny((event, ...args) => {
-        console.log(`got ${event}`);
-      });
+        console.log(`got ${event}`)
+      })
     }
-  }, [socket, dispatch, url, authToken, contacts]);
+  }, [socket, dispatch, url, authToken, contacts])
 
   return (
-    <Flex w="100%" p="3" height="92vh" direction="row">
+    <Flex w='100%' p='3' height='92vh' direction='row'>
       <ContactList contacts={contacts} />
-      <Route path="/chat/:chatId">
+      <Route path='/chat/:chatId'>
         <ChatPane socket={socket} />
       </Route>
     </Flex>
-  );
-};
+  )
+}
