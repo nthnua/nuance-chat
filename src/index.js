@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 import theme from './theme'
+import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>

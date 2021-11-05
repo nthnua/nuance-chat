@@ -10,9 +10,9 @@ import { backendUrl } from '../../env'
 
 export const Lounge = () => {
   const dispatch = useDispatch()
-  const authToken = useSelector(state => state.auth.session.token)
-  const contacts = useSelector(state => state.lounge.contacts)
-  const contactsStatus = useSelector(state => state.lounge.contactsStatus)
+  const authToken = useSelector((state) => state.auth.session.token)
+  const contacts = useSelector((state) => state.lounge.contacts)
+  const contactsStatus = useSelector((state) => state.lounge.contactsStatus)
   // const chatId = useSelector(state => state.lounge.activeChatMeta.id)
   const baseUrl = backendUrl || 'http://localhost:8000'
   const url = `${baseUrl}/api/lounge`
@@ -33,23 +33,25 @@ export const Lounge = () => {
   useEffect(() => {
     if (socket) {
       socket.on('connect', () => {
-        dispatch(socketConnected({
-          url,
-          authToken,
-          socketId: socket.id
-        }))
+        dispatch(
+          socketConnected({
+            url,
+            authToken,
+            socketId: socket.id
+          })
+        )
       })
 
       socket.on('messageDelivery', ({ _id, status }, fn) => {
         status === 1 ? console.log('Sent') : console.log('Delivered')
-        if (typeof (fn) === 'function') {
+        if (typeof fn === 'function') {
           fn({
             _id,
             status: 3
           })
         }
       })
-      socket.on('chatMessage', data => {
+      socket.on('chatMessage', (data) => {
         // trusting the client to say the truth
         // if client lies then some other message's status can be manipulated with bruteforce
         // as _id is hard to guess
@@ -59,19 +61,23 @@ export const Lounge = () => {
           sender: data.sender,
           status: 2
         })
-        if (contacts.some(contact => contact.id === data.sender)) {
+        if (contacts.some((contact) => contact.id === data.sender)) {
           console.log('yes')
           console.log(data)
-          dispatch(addChat({
-            chatId: data.sender,
-            data
-          }))
+          dispatch(
+            addChat({
+              chatId: data.sender,
+              data
+            })
+          )
         } else {
-          dispatch(addContact({
-            id: data.sender,
-            name: 'Joe',
-            chats: [data]
-          }))
+          dispatch(
+            addContact({
+              id: data.sender,
+              name: 'Joe',
+              chats: [data]
+            })
+          )
         }
       })
 
@@ -85,7 +91,7 @@ export const Lounge = () => {
   }, [socket, dispatch, url, authToken, contacts])
 
   return (
-    <Flex w='100%' direction='row'>
+    <Flex w='100%' p='3' height='92vh' direction='row'>
       <ContactList contacts={contacts} />
       <Route path='/chat/:chatId'>
         <ChatPane socket={socket} />

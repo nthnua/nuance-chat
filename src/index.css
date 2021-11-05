@@ -1,0 +1,23 @@
+@media only screen and (min-width: 765px) {
+  ::-webkit-scrollbar {
+    width: 0.5vw;
+    height: 1.25vh;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(245, 245, 245, 0.021);
+    border-radius: 5px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.7);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(128, 128, 128);
+    border-radius: 5px;
+  }
+}

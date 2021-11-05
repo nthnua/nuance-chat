@@ -1,5 +1,14 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons'
-import { Button, Flex, FormControl, FormLabel, Input, useColorModeValue, Text, Heading } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  useColorModeValue,
+  Text,
+  Heading
+} from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { requestLogin } from '../authSlice'
@@ -23,26 +32,55 @@ export const LoginPage = () => {
     dispatch(requestLogin({ url, username, password }))
   }
   return (
-    <Flex w='100vw' h='100vh' bgSize='cover' bgColor={pageBg} align='center' justify='center'>
+    <Flex
+      w='100vw'
+      h='100vh'
+      bgSize='cover'
+      bgColor={pageBg}
+      align='center'
+      justify='center'
+    >
       <form onSubmit={handleSubmit}>
-        <Flex p='8' m='0' w='sm' h='xl' bgColor={loginPromptBg} borderRadius='base' flexDir='column' justify='space-around'>
+        <Flex
+          p='8'
+          m='0'
+          w='sm'
+          h='xl'
+          bgColor={loginPromptBg}
+          borderRadius='base'
+          flexDir='column'
+          justify='space-around'
+        >
           <Heading>Hi there!</Heading>
           <Text fontSize={['md', null, 'lg']}>Good to see you again</Text>
           <FormControl isRequired>
-            <FormLabel fontSize={['md', null, 'lg']}>
-              Username
-            </FormLabel>
-            <Input fontSize={['md', null, 'lg']} type='username' value={username} onChange={e => setUsername(e.target.value)} />
+            <FormLabel fontSize={['md', null, 'lg']}>Username</FormLabel>
+            <Input
+              fontSize={['md', null, 'lg']}
+              type='username'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </FormControl>
           <FormControl isRequired>
-            <FormLabel fontSize={['md', null, 'lg']}>
-              Password
-            </FormLabel>
-            <Input fontSize={['md', null, 'lg']} type='password' value={password} onChange={e => setPassword(e.target.value)} />
+            <FormLabel fontSize={['md', null, 'lg']}>Password</FormLabel>
+            <Input
+              fontSize={['md', null, 'lg']}
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </FormControl>
 
-          <Button fontSize={['md', null, 'lg']} colorScheme='teal' alignSelf='flex-start' type='submit'>Login<ArrowForwardIcon mx='2' /></Button>
-
+          <Button
+            fontSize={['md', null, 'lg']}
+            colorScheme='teal'
+            alignSelf='flex-start'
+            type='submit'
+          >
+            Login
+            <ArrowForwardIcon mx='2' />
+          </Button>
         </Flex>
       </form>
     </Flex>
