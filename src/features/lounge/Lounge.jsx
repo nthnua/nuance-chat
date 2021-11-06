@@ -26,7 +26,7 @@ export const Lounge = () => {
 
   useEffect(() => {
     if (contactsStatus === 'loaded' && socket) {
-      socket.emit('Connected')
+      socket.emit('initialConnection')
     }
   }, [contactsStatus, socket])
   useEffect(() => {
