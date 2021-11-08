@@ -14,9 +14,8 @@ export const Lounge = () => {
   const contacts = useSelector((state) => state.lounge.contacts)
   const contactsStatus = useSelector((state) => state.lounge.contactsStatus)
   // const chatId = useSelector(state => state.lounge.activeChatMeta.id)
-  const baseUrl = backendUrl || 'http://localhost:8000'
-  const url = `${baseUrl}/api/lounge`
-  const socket = io(baseUrl, {
+  const url = `${backendUrl}/api/lounge`
+  const socket = io(backendUrl, {
     auth: {
       token: authToken
     }
@@ -27,7 +26,7 @@ export const Lounge = () => {
 
   useEffect(() => {
     if (contactsStatus === 'loaded' && socket) {
-      socket.emit('Connected')
+      socket.emit('initialConnection')
     }
   }, [contactsStatus, socket])
   useEffect(() => {

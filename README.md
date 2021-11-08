@@ -8,6 +8,3 @@
 - For development:
   -  npm install
   -  npm start
-
-#### Instance hosted on netlify:
-  - https://nervous-elion-154ecb.netlify.app

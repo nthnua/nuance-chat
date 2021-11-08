@@ -24,8 +24,7 @@ const ChatPane = ({ socket }) => {
 
   const chatRef = useRef()
 
-  const baseUrl = backendUrl || 'http://localhost:8000'
-  const url = `${baseUrl}/api/chats/${chatId}`
+  const url = `${backendUrl}/api/chats/${chatId}`
 
   useEffect(() => {
     if (chatId && socket) {
