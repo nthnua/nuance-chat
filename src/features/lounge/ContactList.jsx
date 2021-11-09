@@ -26,10 +26,10 @@ const ContactList = ({ contacts }) => {
         )
   )
   return (
-    <Flex overflow='hidden' rounded='xl' mr='3' boxShadow='xl'>
+    <Flex grow='1' overflow='hidden' rounded='xl' mr={[0, null, 3]} boxShadow='xl'>
       <Flex
+        grow='1'
         rounded='xl'
-        width='sm'
         overflow='auto'
         backgroundColor={borderColor}
         flexDir='column'
