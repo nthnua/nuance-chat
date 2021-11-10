@@ -4,9 +4,9 @@ import ContactList from './ContactList'
 import { updateContacts, addContact, addChat } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex, useBreakpointValue } from '@chakra-ui/react'
-import { io } from 'socket.io-client'
+import { socket } from '../../service/socket'
 import { Route } from 'react-router'
-import { backendUrl } from '../../env'
+// import { backendUrl } from '../../service/config'
 
 export const Lounge = () => {
   const isMobile = useBreakpointValue({ base: true, md: false })
@@ -14,20 +14,23 @@ export const Lounge = () => {
   const authToken = useSelector((state) => state.auth.session.token)
   const contacts = useSelector((state) => state.lounge.contacts)
   // const chatId = useSelector(state => state.lounge.activeChatMeta.id)
-  const url = `${backendUrl}/api/lounge`
-  const socket = io(backendUrl, {
-    auth: {
-      token: authToken
-    }
-  })
+
+  // const url = `${backendUrl}/api/lounge`
+  // const socket = io(backendUrl, {
+  //   auth: {
+  //     token: authToken
+  //   }
+  // })
 
   useEffect(() => {
-    console.log('something changed')
-    socket.on('initialContacts', (contacts, acknowledge) => {
-      dispatch(updateContacts(contacts))
-      acknowledge(Date.now())
-    })
-  }, [dispatch, socket])
+    if (socket) {
+      console.log('something changed')
+      socket.on('initialContacts', (contacts, acknowledge) => {
+        dispatch(updateContacts(contacts))
+        acknowledge(Date.now())
+      })
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (socket) {
@@ -78,7 +81,7 @@ export const Lounge = () => {
         console.log(`got ${event}`)
       })
     }
-  }, [socket, dispatch, url, authToken, contacts])
+  }, [dispatch, authToken, contacts])
 
   return (
     <Flex w='100%' p={[1, null, 3]} height='92vh' direction='row'>

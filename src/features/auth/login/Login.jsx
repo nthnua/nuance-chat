@@ -12,7 +12,7 @@ import {
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { requestLogin } from '../authSlice'
-import { backendUrl } from '../../../env'
+import { backendUrl } from '../../../service/config'
 
 export const LoginPage = () => {
   // local state

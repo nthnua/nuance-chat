@@ -5,7 +5,7 @@ import ChatBubble from './ChatBubble'
 import { addChat, getActiveChat } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
 import { useParams } from 'react-router'
-import { backendUrl } from '../../env'
+import { backendUrl } from '../../service/config'
 import { ContactsNavbar } from '../navbars/Contacts'
 import { Divider } from '@chakra-ui/layout'
 
