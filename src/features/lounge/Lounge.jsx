@@ -4,11 +4,10 @@ import ContactList from './ContactList'
 import { updateContacts, addContact, addChat } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex, useBreakpointValue } from '@chakra-ui/react'
-import { socket } from '../../service/socket'
 import { Route } from 'react-router'
 // import { backendUrl } from '../../service/config'
 
-export const Lounge = () => {
+export const Lounge = ({ socket }) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
   const dispatch = useDispatch()
   const authToken = useSelector((state) => state.auth.session.token)
@@ -30,8 +29,7 @@ export const Lounge = () => {
         acknowledge(Date.now())
       })
     }
-  }, [dispatch])
-
+  }, [dispatch, socket])
   useEffect(() => {
     if (socket) {
       socket.on('messageDelivery', ({ _id, status }, fn) => {
@@ -81,7 +79,7 @@ export const Lounge = () => {
         console.log(`got ${event}`)
       })
     }
-  }, [dispatch, authToken, contacts])
+  }, [dispatch, authToken, contacts, socket])
 
   return (
     <Flex w='100%' p={[1, null, 3]} height='92vh' direction='row'>

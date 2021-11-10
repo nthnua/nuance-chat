@@ -57,8 +57,6 @@ const authSlice = createSlice({
     state.session.id = action.payload.id
     state.login.status = 'idle'
     // when login store in localstorage
-    // const event = new window.CustomEvent('initialAuthToken', { detail: action.payload.token })
-    // window.dispatchEvent(event)
     window.localStorage.setItem('auth', JSON.stringify(state))
   }).addCase(requestLogin.rejected, (state, action) => {
     state.login.status = 'idle'
