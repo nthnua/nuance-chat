@@ -3,7 +3,7 @@ import { Heading } from '@chakra-ui/layout'
 import { IconButton } from '@chakra-ui/button'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useHistory } from 'react-router'
-export const ContactsNavbar = () => {
+export const ContactsNavbar = ({ name }) => {
   const history = useHistory()
   const bgColor = useColorModeValue('#87E0E1', '#5A8D98')
   return (
@@ -22,7 +22,7 @@ export const ContactsNavbar = () => {
         icon={<ArrowBackIcon />}
       />
       <Heading size='sm' alignSelf='center'>
-        Not John Doe
+        {name}
       </Heading>
       <Avatar />
     </Flex>

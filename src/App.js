@@ -9,8 +9,8 @@ import { NavBar } from './features/navbars/Navbar'
 import { backendUrl } from './service/config'
 
 function App () {
-  const loginStatus = useSelector((state) => state.auth.session.status)
-  const authToken = useSelector((state) => state.auth.session.token)
+  const loginStatus = useSelector(state => state.auth.session.status)
+  const authToken = useSelector(state => state.auth.session.token)
   if (loginStatus === 'logged-out') {
     return <LoginPage />
   } else if (loginStatus === 'logged-in') {

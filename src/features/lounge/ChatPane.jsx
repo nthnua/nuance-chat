@@ -1,4 +1,10 @@
-import { Flex, Input, IconButton, useColorModeValue, Box } from '@chakra-ui/react'
+import {
+  Flex,
+  Input,
+  IconButton,
+  useColorModeValue,
+  Box
+} from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
@@ -12,12 +18,16 @@ import { Divider } from '@chakra-ui/layout'
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
   const { chatId } = useParams()
-  const authToken = useSelector((state) => state.auth.session.token)
-  const userId = useSelector((state) => state.auth.session.id)
-  const chats = useSelector((state) => {
-    return state.lounge.contacts.length !== 0 ? state.lounge.contacts.find(contact => contact.id === chatId).chats : []
+  const authToken = useSelector(state => state.auth.session.token)
+  const userId = useSelector(state => state.auth.session.id)
+  const chats = useSelector(state => {
+    return state.lounge.contacts.length !== 0
+      ? state.lounge.contacts.find(contact => contact.id === chatId).chats
+      : []
   })
-
+  const name = useSelector(state => state.lounge.contacts).find(
+    c => c.id === chatId
+  )?.name
   const bubbleColor = useColorModeValue('green.200', 'green.700')
 
   // const [connection, setConnection] = useState(null);
@@ -32,12 +42,13 @@ const ChatPane = ({ socket }) => {
     if (chatId && socket) {
       // get the chat for the contact and connect to the peer
       // dispatch(getChat({ url, authToken, id: chatId }))
-      dispatch(setActiveChatMeta({ chatId }))
+      dispatch(setActiveChatMeta({ id: chatId }))
       socket.emit('getChats', {
         chatId
       })
       // setConnection(peer.connect(peerId));
     }
+    return () => dispatch(setActiveChatMeta({ id: '' }))
   }, [chatId, dispatch, url, authToken, socket])
 
   // useEffect(() => {
@@ -53,8 +64,7 @@ const ChatPane = ({ socket }) => {
             sender={chat.sender === userId}
             color={bubbleColor}
           />
-        )
-        )
+        ))
       )
     }
 
@@ -78,7 +88,7 @@ const ChatPane = ({ socket }) => {
   //   dispatch(setActiveChatMeta({ chatId }))
   // }, [chatId, dispatch])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
     e.stopPropagation()
     // send message
@@ -91,7 +101,7 @@ const ChatPane = ({ socket }) => {
         status: 0
       }
       dispatch(addChat({ chatId, data }))
-      socket.emit('chatMessage', data, (recievedData) => {
+      socket.emit('chatMessage', data, recievedData => {
         console.log(recievedData)
       })
       setMessage('')
@@ -108,7 +118,7 @@ const ChatPane = ({ socket }) => {
       overflow='hidden'
       boxShadow='2xl'
     >
-      <ContactsNavbar />
+      <ContactsNavbar name={name} />
       <Flex
         w='100%'
         pt='2'
@@ -129,12 +139,17 @@ const ChatPane = ({ socket }) => {
             <Input
               colorScheme='green'
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={e => setMessage(e.target.value)}
               mx='1'
               px='2'
               autoFocus
             />
-            <IconButton colorScheme='green' type='submit' mx='1' icon={<IoSend />} />
+            <IconButton
+              colorScheme='green'
+              type='submit'
+              mx='1'
+              icon={<IoSend />}
+            />
           </Flex>
         </form>
       </Box>

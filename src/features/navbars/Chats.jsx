@@ -1,19 +1,27 @@
-import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { Flex, useColorMode, Text, useColorModeValue } from '@chakra-ui/react'
+import { SearchIcon } from '@chakra-ui/icons'
+import { Flex } from '@chakra-ui/react'
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
 
-export const NavBar = () => {
-  const bgColor = useColorModeValue('#87E0E1', '#5A8D98')
-  const colorMode = localStorage.getItem('chakra-ui-color-mode')
-  const { toggleColorMode } = useColorMode()
-  const ColorModeToggleButton = () => {
-    if (colorMode === 'dark') {
-      return <SunIcon focusable onClick={toggleColorMode} />
-    } else {
-      return <MoonIcon focusable onClick={toggleColorMode} />
-    }
-  }
+export const ChatNavbar = () => {
+  const colorMode = window.localStorage.getItem('chakra-ui-color-mode')
+
   return (
-    <Flex p='4' bg={bgColor} flexDir='row-reverse' h='7vh' position='sticky' zIndex='sticky' top='0' w='100%'><Text fontSize='lg' px='2' position='absolute' left='0'>Chats</Text><ColorModeToggleButton /></Flex>
-
+    <Flex p='1.5' w='100%'>
+      <InputGroup
+        rounded='lg'
+        overflow='hidden'
+        bg={colorMode === 'dark' ? 'blackAlpha.300' : 'whiteAlpha.700'}
+      >
+        <InputLeftElement pointerEvents='none'>
+          <SearchIcon color='gray.300' />
+        </InputLeftElement>
+        <Input
+          type='tel'
+          placeholder='Search away!'
+          rounded='lg'
+          overflow='hidden'
+        />
+      </InputGroup>
+    </Flex>
   )
 }

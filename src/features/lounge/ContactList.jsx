@@ -1,40 +1,47 @@
-import { Flex } from '@chakra-ui/react'
+import { Divider, Flex } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
-import { Box } from '@chakra-ui/layout'
 import Contact from './Contact'
 import { useColorModeValue } from '@chakra-ui/color-mode'
+import { ChatNavbar } from '../navbars/Chats'
 
 const ContactList = ({ contacts }) => {
-  const borderColor = useColorModeValue('green.200', 'green.700')
-  const hoverColor = useColorModeValue('green.100', 'green.500')
-  const selfId = useSelector((state) => state.auth.session.id)
+  const borderColor = useColorModeValue('green.300', 'green.700')
+  const selfId = useSelector(state => state.auth.session.id)
+  const activeChatId = useSelector(state => state.lounge.activeChatMeta.id)
 
-  const CL = contacts.map((contact, id) =>
-    contact.id === selfId
-      ? null
-      : (
-        <Box
-          key={`p_${id}`}
-          p='1'
-          m='1'
-          rounded='lg'
-          transition='ease-in 100ms'
-          _hover={{ bgColor: hoverColor }}
-        >
-          <Contact key={id} id={contact.id} name={contact.name} peerId={contact.peerId} />
-        </Box>
-        )
-  )
+  const CL = contacts.map((contact, id) => {
+    const isActiveChat = contact.id === activeChatId
+    return (
+      contact.id !== selfId && (
+        <Contact
+          isActiveChat={isActiveChat}
+          key={id}
+          id={contact.id}
+          name={contact.name}
+          peerId={contact.peerId}
+        />
+      )
+    )
+  })
   return (
-    <Flex grow='1' overflow='hidden' rounded='xl' mr={[0, null, 3]} boxShadow='xl'>
+    <Flex
+      grow='1'
+      overflow='hidden'
+      rounded='xl'
+      mr={[0, null, 3]}
+      boxShadow='xl'
+    >
       <Flex
         grow='1'
         rounded='xl'
-        overflow='auto'
         backgroundColor={borderColor}
         flexDir='column'
       >
-        {CL}
+        <ChatNavbar />
+        <Divider />
+        <Flex flexDir='column' overflow='auto'>
+          {CL}
+        </Flex>
       </Flex>
     </Flex>
   )
