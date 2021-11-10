@@ -4,7 +4,7 @@ import { client } from '../api/client'
 let auth = null
 // get auth info from local storage
 try {
-  auth = JSON.parse(localStorage.getItem('auth'))
+  auth = JSON.parse(window.localStorage.getItem('auth'))
 } catch (error) {
   console.log(error)
 } finally {
@@ -57,7 +57,7 @@ const authSlice = createSlice({
     state.session.id = action.payload.id
     state.login.status = 'idle'
     // when login store in localstorage
-    localStorage.setItem('auth', JSON.stringify(state))
+    window.localStorage.setItem('auth', JSON.stringify(state))
   }).addCase(requestLogin.rejected, (state, action) => {
     state.login.status = 'idle'
     state.session.error = action.error

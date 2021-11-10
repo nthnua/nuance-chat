@@ -2,10 +2,10 @@ import { Flex, Input, IconButton, useColorModeValue, Box } from '@chakra-ui/reac
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
-import { addChat, getActiveChat } from './loungeSlice'
+import { addChat, setActiveChatMeta } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
 import { useParams } from 'react-router'
-import { backendUrl } from '../../env'
+import { backendUrl } from '../../service/config'
 import { ContactsNavbar } from '../navbars/Contacts'
 import { Divider } from '@chakra-ui/layout'
 
@@ -14,7 +14,9 @@ const ChatPane = ({ socket }) => {
   const { chatId } = useParams()
   const authToken = useSelector((state) => state.auth.session.token)
   const userId = useSelector((state) => state.auth.session.id)
-  const chats = useSelector((state) => state.lounge.activeChat)
+  const chats = useSelector((state) => {
+    return state.lounge.contacts.length !== 0 ? state.lounge.contacts.find(contact => contact.id === chatId).chats : []
+  })
 
   const bubbleColor = useColorModeValue('green.200', 'green.700')
 
@@ -30,22 +32,32 @@ const ChatPane = ({ socket }) => {
     if (chatId && socket) {
       // get the chat for the contact and connect to the peer
       // dispatch(getChat({ url, authToken, id: chatId }))
-      dispatch(getActiveChat({ chatId }))
+      dispatch(setActiveChatMeta({ chatId }))
+      socket.emit('getChats', {
+        chatId
+      })
       // setConnection(peer.connect(peerId));
     }
   }, [chatId, dispatch, url, authToken, socket])
 
+  // useEffect(() => {
+  //   dispatch(getActiveChat({ chatId }))
+  // }, [contacts, dispatch, chatId])
   useEffect(() => {
-    setChatBubbles(
-      chats.map((chat, id) => (
-        <ChatBubble
-          key={id}
-          text={chat.content}
-          sender={chat.sender === userId}
-          color={bubbleColor}
-        />
-      ))
-    )
+    if (chats.length !== 0) {
+      setChatBubbles(
+        chats.map((chat, id) => (
+          <ChatBubble
+            key={id}
+            text={chat.content}
+            sender={chat.sender === userId}
+            color={bubbleColor}
+          />
+        )
+        )
+      )
+    }
+
     setTimeout(() => chatRef.current?.scrollIntoView({ behavior: 'smooth' }), 1) // scroll after 1 tick, won't work otherwise
   }, [chats, userId, bubbleColor])
 
@@ -120,6 +132,7 @@ const ChatPane = ({ socket }) => {
               onChange={(e) => setMessage(e.target.value)}
               mx='1'
               px='2'
+              autoFocus
             />
             <IconButton colorScheme='green' type='submit' mx='1' icon={<IoSend />} />
           </Flex>

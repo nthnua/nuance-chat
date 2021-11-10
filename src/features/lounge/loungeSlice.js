@@ -9,9 +9,9 @@ const initialState = {
     id: '',
     status: ''
   },
-  // activeChatMeta: {
-  //   id: ''
-  // },
+  activeChatMeta: {
+    id: ''
+  },
   activeChat: []
 }
 
@@ -66,6 +66,14 @@ const loungeSlice = createSlice({
       //   }
       // })
     },
+    updateChats: (state, action) => {
+      state.contacts = state.contacts.map((contact, index) => {
+        if (contact.id === action.payload.chatId) {
+          contact.chats = action.payload.data.messages
+        }
+        return contact
+      })
+    },
     getActiveChat: (state, action) => {
       state.contacts.forEach((contact) => {
         if (contact.id === action.payload.chatId) {
@@ -75,8 +83,11 @@ const loungeSlice = createSlice({
     },
     addContact: (state, action) => {
       state.contacts.push(action.payload)
+    },
+    updateContacts: (state, action) => {
+      state.contacts = action.payload.contacts
+      state.contactsStatus = 'loaded'
     }
-
   },
   extraReducers: builder => builder.addCase(fetchContacts.pending, (state) => {
     state.status = 'pending'
@@ -105,6 +116,6 @@ const loungeSlice = createSlice({
 
 })
 
-export const { addChat, getActiveChat, addContact } = loungeSlice.actions
+export const { addChat, getActiveChat, setActiveChatMeta, addContact, updateContacts, updateChats } = loungeSlice.actions
 
 export default loungeSlice.reducer
