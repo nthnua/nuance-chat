@@ -75,6 +75,9 @@ const loungeSlice = createSlice({
     },
     addContact: (state, action) => {
       state.contacts.push(action.payload)
+    },
+    updateContacts: (state, action) => {
+      state.contacts = action.payload.contacts
     }
 
   },
@@ -105,6 +108,6 @@ const loungeSlice = createSlice({
 
 })
 
-export const { addChat, getActiveChat, addContact } = loungeSlice.actions
+export const { addChat, getActiveChat, addContact, updateContacts } = loungeSlice.actions
 
 export default loungeSlice.reducer

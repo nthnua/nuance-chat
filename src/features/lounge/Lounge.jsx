@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
-import { addChat, fetchContacts, socketConnected, addContact } from './loungeSlice'
+import { updateContacts, addContact, addChat } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex, useBreakpointValue } from '@chakra-ui/react'
 import { io } from 'socket.io-client'
@@ -13,7 +13,6 @@ export const Lounge = () => {
   const dispatch = useDispatch()
   const authToken = useSelector((state) => state.auth.session.token)
   const contacts = useSelector((state) => state.lounge.contacts)
-  const contactsStatus = useSelector((state) => state.lounge.contactsStatus)
   // const chatId = useSelector(state => state.lounge.activeChatMeta.id)
   const url = `${backendUrl}/api/lounge`
   const socket = io(backendUrl, {
@@ -21,27 +20,17 @@ export const Lounge = () => {
       token: authToken
     }
   })
-  useEffect(() => {
-    dispatch(fetchContacts({ url, authToken }))
-  }, [authToken, dispatch, url])
 
   useEffect(() => {
-    if (contactsStatus === 'loaded' && socket) {
-      socket.emit('initialConnection')
-    }
-  }, [contactsStatus, socket])
+    console.log('something changed')
+    socket.on('initialContacts', (contacts, acknowledge) => {
+      dispatch(updateContacts(contacts))
+      acknowledge(Date.now())
+    })
+  }, [dispatch, socket])
+
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => {
-        dispatch(
-          socketConnected({
-            url,
-            authToken,
-            socketId: socket.id
-          })
-        )
-      })
-
       socket.on('messageDelivery', ({ _id, status }, fn) => {
         status === 1 ? console.log('Sent') : console.log('Delivered')
         if (typeof fn === 'function') {
@@ -61,6 +50,7 @@ export const Lounge = () => {
           sender: data.sender,
           status: 2
         })
+        // TODO: handle this somewhere else
         if (contacts.some((contact) => contact.id === data.sender)) {
           console.log('yes')
           console.log(data)
