@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
 import { addChat, fetchContacts, socketConnected, addContact } from './loungeSlice'
 import ChatPane from './ChatPane'
-import { Flex } from '@chakra-ui/react'
+import { Flex, useBreakpointValue } from '@chakra-ui/react'
 import { io } from 'socket.io-client'
 import { Route } from 'react-router'
 import { backendUrl } from '../../env'
 
 export const Lounge = () => {
+  const isMobile = useBreakpointValue({ base: true, md: false })
   const dispatch = useDispatch()
   const authToken = useSelector((state) => state.auth.session.token)
   const contacts = useSelector((state) => state.lounge.contacts)
@@ -90,10 +91,16 @@ export const Lounge = () => {
   }, [socket, dispatch, url, authToken, contacts])
 
   return (
-    <Flex w='100%' p='3' height='92vh' direction='row'>
-      <ContactList contacts={contacts} />
+    <Flex w='100%' p={[1, null, 3]} height='92vh' direction='row'>
+      <Route exact={isMobile} path='/'>
+        <Flex minW='35vw' grow={['1', null, '0']}>
+          <ContactList contacts={contacts} />
+        </Flex>
+      </Route>
       <Route path='/chat/:chatId'>
-        <ChatPane socket={socket} />
+        <Flex grow='1'>
+          <ChatPane socket={socket} />
+        </Flex>
       </Route>
     </Flex>
   )

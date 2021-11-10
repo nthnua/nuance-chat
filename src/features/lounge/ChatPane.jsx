@@ -97,7 +97,15 @@ const ChatPane = ({ socket }) => {
       boxShadow='2xl'
     >
       <ContactsNavbar />
-      <Flex pt='2' pb='1' flexDir='column' grow='1' overflowY='auto' overflowX='hidden'>
+      <Flex
+        w='100%'
+        pt='2'
+        pb='1'
+        flexDir='column'
+        grow='1'
+        overflowY='auto'
+        overflowX='hidden'
+      >
         {chatBubbles}
         {/* 👇 dummy div to scroll to bottom of the chat on sending message */}
         <div ref={chatRef} />
