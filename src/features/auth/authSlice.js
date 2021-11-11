@@ -33,35 +33,46 @@ const initialState = auth
 export const requestLogin = createAsyncThunk(
   'auth/requestLogin',
   // return acton for fulfilled case
-  ({ url, username, password }) => client.post(url, {
-    username,
-    password
-  })
+  ({ url, username, password }) =>
+    client.post(url, {
+      username,
+      password
+    })
 )
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state) => {
-    },
-    logout: (state) => {
-      state = initialState
+    login: state => { },
+    logout: (state, action) => {
+      window.localStorage.removeItem('auth')
+      state.session = {
+        id: '',
+        token: '',
+        peerId: '',
+        status: 'logged-out',
+        error: {}
+      }
     }
   },
-  extraReducers: (builder) => builder.addCase(requestLogin.pending, (state) => {
-    state.login.status = 'pending'
-  }).addCase(requestLogin.fulfilled, (state, action) => {
-    state.session.token = action.payload.token
-    state.session.status = 'logged-in'
-    state.session.id = action.payload.id
-    state.login.status = 'idle'
-    // when login store in localstorage
-    window.localStorage.setItem('auth', JSON.stringify(state))
-  }).addCase(requestLogin.rejected, (state, action) => {
-    state.login.status = 'idle'
-    state.session.error = action.error
-  })
+  extraReducers: builder =>
+    builder
+      .addCase(requestLogin.pending, state => {
+        state.login.status = 'pending'
+      })
+      .addCase(requestLogin.fulfilled, (state, action) => {
+        state.session.token = action.payload.token
+        state.session.status = 'logged-in'
+        state.session.id = action.payload.id
+        state.login.status = 'idle'
+        // when login store in localstorage
+        window.localStorage.setItem('auth', JSON.stringify(state))
+      })
+      .addCase(requestLogin.rejected, (state, action) => {
+        state.login.status = 'idle'
+        state.session.error = action.error
+      })
 })
 
 export const { login, logout } = authSlice.actions

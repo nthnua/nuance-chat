@@ -25,7 +25,7 @@ export const LoginPage = () => {
   // redux dispatcher
   const dispatch = useDispatch()
   // handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
     e.stopPropagation()
     dispatch(requestLogin({ url, username, password }))
@@ -58,7 +58,7 @@ export const LoginPage = () => {
               fontSize={['md', null, 'lg']}
               type='username'
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={e => setUsername(e.target.value)}
             />
           </FormControl>
           <FormControl isRequired>
@@ -67,7 +67,7 @@ export const LoginPage = () => {
               fontSize={['md', null, 'lg']}
               type='password'
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
             />
           </FormControl>
 
