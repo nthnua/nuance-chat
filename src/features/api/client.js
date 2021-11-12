@@ -4,7 +4,7 @@
 export async function client (endpoint, { body, ...customConfig } = {}, timeout = 8000) {
   const headers = { 'Content-Type': 'application/json' }
 
-  const controller = new AbortController()
+  const controller = new window.AbortController()
   const signal = controller.signal
 
   const config = {
