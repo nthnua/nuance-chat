@@ -84,6 +84,8 @@ const authSlice = createSlice({
         state.login.status = 'idle'
         state.session.error = action.error
       })
+      .addCase(requestLogout.pending, (state, action) => {
+      })
       .addCase(requestLogout.fulfilled, (state, action) => {
         state.session = {
           id: '',
