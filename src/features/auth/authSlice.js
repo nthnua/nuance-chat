@@ -87,14 +87,8 @@ const authSlice = createSlice({
       .addCase(requestLogout.pending, (state, action) => {
       })
       .addCase(requestLogout.fulfilled, (state, action) => {
-        state.session = {
-          id: '',
-          token: '',
-          peerId: '',
-          status: 'logged-out',
-          error: {}
-        }
         window.localStorage.removeItem('auth')
+        window.location.assign('/login')
       })
       .addCase(requestLogout.rejected, (state, action) => {
         state.session.error = action.error

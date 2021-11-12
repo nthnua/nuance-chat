@@ -43,7 +43,6 @@ export const NavBar = ({ socket }) => {
           ml='5'
           onClick={() => {
             dispatch(requestLogout({ url, authToken }))
-            socket.disconnect()
           }}
         >
           Logout
