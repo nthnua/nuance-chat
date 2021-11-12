@@ -32,7 +32,7 @@ const initialState = auth
 
 export const requestLogin = createAsyncThunk(
   'auth/requestLogin',
-  // return acton for fulfilled case
+  // return action for fulfilled case
   ({ url, username, password }) =>
     client.post(url, {
       username,
@@ -41,22 +41,21 @@ export const requestLogin = createAsyncThunk(
 )
 export const requestLogout = createAsyncThunk(
   'auth/requestLogout',
-  ({ url, authToken }) => {
+  ({ url, authToken }) =>
     client.post(url, {
-
     }, {
       headers: {
         Authorization: authToken
       }
     })
-  }
+
 )
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: state => { }
+    // login: state => { }
     // logout: (state, action) => {
     //   window.localStorage.removeItem('auth')
     //   state.session = {
@@ -84,8 +83,8 @@ const authSlice = createSlice({
       .addCase(requestLogin.rejected, (state, action) => {
         state.login.status = 'idle'
         state.session.error = action.error
-      }).addCase(requestLogout.fulfilled, (state, action) => {
-        window.localStorage.removeItem('auth')
+      })
+      .addCase(requestLogout.fulfilled, (state, action) => {
         state.session = {
           id: '',
           token: '',
@@ -93,8 +92,11 @@ const authSlice = createSlice({
           status: 'logged-out',
           error: {}
         }
-      }).addCase(requestLogout.rejected, (state, action) => {
-        console.error(action.payload)
+        window.localStorage.removeItem('auth')
+      })
+      .addCase(requestLogout.rejected, (state, action) => {
+        state.session.error = action.error
+        console.error(action.error)
       })
 })
 
