@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { requestLogout } from '../auth/authSlice'
 import { backendUrl } from '../../service/config'
 
-export const NavBar = () => {
+export const NavBar = ({ socket }) => {
   const bgColor = useColorModeValue('green.100', 'green.400')
   const dispatch = useDispatch()
   const colorMode = window.localStorage.getItem('chakra-ui-color-mode')
@@ -43,6 +43,7 @@ export const NavBar = () => {
           ml='5'
           onClick={() => {
             dispatch(requestLogout({ url, authToken }))
+            socket.disconnect()
           }}
         >
           Logout
