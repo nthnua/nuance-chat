@@ -29,6 +29,7 @@ const ChatPane = ({ socket }) => {
     c => c.id === chatId
   )?.name
   const bubbleColor = useColorModeValue('green.200', 'green.700')
+  const borderColor = useColorModeValue('#87E0E1', '#5A8D98')
 
   // const [connection, setConnection] = useState(null);
   const [message, setMessage] = useState('')
@@ -112,7 +113,7 @@ const ChatPane = ({ socket }) => {
     <Flex
       flexDir='column'
       border='2px solid'
-      borderColor={bubbleColor}
+      borderColor={borderColor}
       rounded='xl'
       grow='1'
       overflow='hidden'
