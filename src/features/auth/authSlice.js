@@ -14,7 +14,6 @@ try {
       session: {
         id: '',
         token: '',
-        peerId: '',
         status: 'logged-out',
         error: {}
       },
@@ -85,10 +84,10 @@ const authSlice = createSlice({
         state.session.error = action.error
       })
       .addCase(requestLogout.pending, (state, action) => {
-      })
-      .addCase(requestLogout.fulfilled, (state, action) => {
         window.localStorage.removeItem('auth')
         window.location.assign('/login')
+      })
+      .addCase(requestLogout.fulfilled, (state, action) => {
       })
       .addCase(requestLogout.rejected, (state, action) => {
         state.session.error = action.error
