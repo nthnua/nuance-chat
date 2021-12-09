@@ -1,10 +1,12 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { Flex, useColorMode, Text, useColorModeValue } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button'
+import { useDispatch } from 'react-redux'
+import { logout } from '../auth/authSlice'
 
 export const NavBar = () => {
   const bgColor = useColorModeValue('green.100', 'green.400')
-
+  const dispatch = useDispatch()
   const colorMode = window.localStorage.getItem('chakra-ui-color-mode')
   const { toggleColorMode } = useColorMode()
   const ColorModeToggleButton = props => {
@@ -37,8 +39,7 @@ export const NavBar = () => {
         <Button
           ml='5'
           onClick={() => {
-            window.localStorage.removeItem('auth')
-            window.location.assign('/')
+            dispatch(logout())
           }}
         >
           Logout

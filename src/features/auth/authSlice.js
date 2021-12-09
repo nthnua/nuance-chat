@@ -44,9 +44,16 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: state => {},
-    logout: state => {
-      state = initialState
+    login: state => { },
+    logout: (state, action) => {
+      window.localStorage.removeItem('auth')
+      state.session = {
+        id: '',
+        token: '',
+        peerId: '',
+        status: 'logged-out',
+        error: {}
+      }
     }
   },
   extraReducers: builder =>
