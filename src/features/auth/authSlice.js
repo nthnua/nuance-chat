@@ -32,29 +32,40 @@ const initialState = auth
 
 export const requestLogin = createAsyncThunk(
   'auth/requestLogin',
-  // return acton for fulfilled case
+  // return action for fulfilled case
   ({ url, username, password }) =>
     client.post(url, {
       username,
       password
     })
 )
+export const requestLogout = createAsyncThunk(
+  'auth/requestLogout',
+  ({ url, authToken }) =>
+    client.post(url, {
+    }, {
+      headers: {
+        Authorization: authToken
+      }
+    })
+
+)
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: state => { },
-    logout: (state, action) => {
-      window.localStorage.removeItem('auth')
-      state.session = {
-        id: '',
-        token: '',
-        peerId: '',
-        status: 'logged-out',
-        error: {}
-      }
-    }
+    // login: state => { }
+    // logout: (state, action) => {
+    //   window.localStorage.removeItem('auth')
+    //   state.session = {
+    //     id: '',
+    //     token: '',
+    //     peerId: '',
+    //     status: 'logged-out',
+    //     error: {}
+    //   }
+    // }
   },
   extraReducers: builder =>
     builder
@@ -73,8 +84,18 @@ const authSlice = createSlice({
         state.login.status = 'idle'
         state.session.error = action.error
       })
+      .addCase(requestLogout.pending, (state, action) => {
+      })
+      .addCase(requestLogout.fulfilled, (state, action) => {
+        window.localStorage.removeItem('auth')
+        window.location.assign('/login')
+      })
+      .addCase(requestLogout.rejected, (state, action) => {
+        state.session.error = action.error
+        console.error(action.error)
+      })
 })
 
-export const { login, logout } = authSlice.actions
+export const { login } = authSlice.actions
 
 export default authSlice.reducer

@@ -22,7 +22,7 @@ function App () {
     return (
       <BrowserRouter>
         <Flex flexDir='column' h='100vh'>
-          <NavBar />
+          <NavBar socket={socket} />
           <Flex alignSelf='stretch' flexGrow='2'>
             <Lounge socket={socket} />
           </Flex>
