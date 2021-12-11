@@ -22,6 +22,11 @@ try {
       },
       logout: {
         status: 'idle'
+      },
+      signup: {
+        status: 'idle',
+        error: false,
+        message: ''
       }
     }
   }
@@ -48,6 +53,12 @@ export const requestLogout = createAsyncThunk(
       }
     })
 
+)
+export const requestSignup = createAsyncThunk(
+  'auth/requestSignup',
+  ({ url, username, age, email, realName, password }) => client.post(url, {
+    username, age, email, realName, password
+  })
 )
 
 const authSlice = createSlice({
@@ -92,6 +103,16 @@ const authSlice = createSlice({
       .addCase(requestLogout.rejected, (state, action) => {
         state.session.error = action.error
         console.error(action.error)
+      }).addCase(requestSignup.pending, (state, action) => {
+        state.signup.status = 'pending'
+      }).addCase(requestSignup.fulfilled, (state, action) => {
+        state.signup.status = 'success'
+        state.signup.message = action.payload
+      }).addCase(requestSignup.rejected, (state, action) => {
+        state.signup.status = 'rejected'
+        state.signup.error = true
+        console.log(action)
+        state.signup.message = action.error.message
       })
 })
 

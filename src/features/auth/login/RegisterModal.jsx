@@ -16,44 +16,27 @@ import {
   Alert,
   AlertIcon,
   AlertDescription,
-  CloseButton,
   Text
 } from '@chakra-ui/react'
 import { backendUrl } from '../../../service/config'
+import { useSelector, useDispatch } from 'react-redux'
+import { requestSignup } from '../authSlice'
 
 function RegisterModal ({ isOpen, onClose }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
-  const [btnLoading, setBtnLoading] = useState(false)
   const [realName, setRealName] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState({ flag: false })
-
-  const registerUser = async e => {
+  const url = `${backendUrl}/api/signup`
+  const signupStatus = useSelector(state => state.auth.signup.status)
+  const signupMessage = useSelector(state => state.auth.signup.message)
+  const signupErrorStatus = useSelector(state => state.auth.signup.error)
+  const dispatch = useDispatch()
+  const registerUser = e => {
     e.preventDefault()
-    setBtnLoading(true)
-    const body = { username, age, email, realName, password }
-    console.log(body)
-    // do your fancy redux shit
-    const res = await window.fetch(`${backendUrl}/api/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-    if (res.ok) {
-      setSuccess(true)
-    } else {
-      const jsonRes = await res.json()
-      setError({
-        flag: true,
-        message: jsonRes.message || 'Soemthing went wrong'
-      })
-    }
-    setBtnLoading(false)
+    // not so fancy redux stuff
+    dispatch(requestSignup({ url, username, age, email, realName, password }))
   }
 
   const initialRef = useRef()
@@ -69,11 +52,11 @@ function RegisterModal ({ isOpen, onClose }) {
       <ModalContent>
         <form onSubmit={registerUser}>
           <ModalHeader>
-            {!success ? 'Create your account' : 'Successfully registered!'}
+            {signupStatus === 'success' ? 'Successfully registered!' : 'Create your account'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            {success
+            {signupStatus === 'success'
               ? (
                 <>
                   <Text fontSize='xl'>
@@ -84,16 +67,11 @@ function RegisterModal ({ isOpen, onClose }) {
                 )
               : (
                 <>
-                  {error.flag && (
+                  {signupErrorStatus && (
                     <Alert status='error' mb={4}>
                       <AlertIcon />
-                      <CloseButton
-                        onClick={() => setError({ flag: false })}
-                        position='absolute'
-                        right='8px'
-                        top='8px'
-                      />
-                      <AlertDescription>{error.message}</AlertDescription>
+
+                      <AlertDescription>{signupMessage}</AlertDescription>
                     </Alert>
                   )}
                   <FormControl isRequired>
@@ -153,10 +131,10 @@ function RegisterModal ({ isOpen, onClose }) {
                 )}
           </ModalBody>
 
-          {!success && (
+          {!(signupStatus === 'success') && (
             <ModalFooter>
               <Button
-                isLoading={btnLoading}
+                isLoading={signupStatus === 'pending'}
                 loadingText='Registering...'
                 type='submit'
                 colorScheme='teal'
