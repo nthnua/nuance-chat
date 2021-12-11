@@ -7,10 +7,11 @@ import {
   Input,
   useColorModeValue,
   Text,
-  Heading
+  Heading,
+  useDisclosure
 } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
-import { useDisclosure } from '@chakra-ui/hooks'
+import { useState } from 'react'
+
 import { useDispatch } from 'react-redux'
 import { requestLogin } from '../authSlice'
 import { backendUrl } from '../../../service/config'
@@ -19,7 +20,7 @@ import RegisterModal from './RegisterModal'
 
 export const LoginPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const finalRef = useRef()
+
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -37,7 +38,7 @@ export const LoginPage = () => {
   }
   return (
     <>
-      <RegisterModal isOpen={isOpen} onClose={onClose} finalRef={finalRef} />
+      <RegisterModal onClose={onClose} isOpen={isOpen} />
       <Flex
         w='100vw'
         h='100vh'
@@ -64,7 +65,6 @@ export const LoginPage = () => {
             <FormControl isRequired>
               <FormLabel fontSize={['md', null, 'lg']}>Username</FormLabel>
               <Input
-                ref={finalRef}
                 fontSize={['md', null, 'lg']}
                 type='username'
                 value={username}
