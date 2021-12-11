@@ -98,7 +98,6 @@ function RegisterModal ({ isOpen, onClose }) {
                       type='email'
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      ref={initialRef}
                       placeholder='Email'
                     />
                   </FormControl>
@@ -109,7 +108,6 @@ function RegisterModal ({ isOpen, onClose }) {
                         <Input
                           value={realName}
                           onChange={e => setRealName(e.target.value)}
-                          ref={initialRef}
                           placeholder='Real Name'
                         />
                       </FormControl>
@@ -121,7 +119,6 @@ function RegisterModal ({ isOpen, onClose }) {
                           type='number'
                           value={age}
                           onChange={e => setAge(e.target.value)}
-                          ref={initialRef}
                           placeholder='Age'
                         />
                       </FormControl>
