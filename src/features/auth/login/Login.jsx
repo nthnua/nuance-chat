@@ -8,7 +8,8 @@ import {
   useColorModeValue,
   Text,
   Heading,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
@@ -20,7 +21,7 @@ import RegisterModal from './RegisterModal'
 
 export const LoginPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const toast = useToast()
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -35,6 +36,14 @@ export const LoginPage = () => {
     e.preventDefault()
     e.stopPropagation()
     dispatch(requestLogin({ url, username, password }))
+    // TODO: Call 👇 on login fail:
+    // toast({
+    //   title: 'Oops!',
+    //   description: "Incorrect username or password",
+    //   status: 'error',
+    //   duration: 7000,
+    //   isClosable: true,
+    // })
   }
   return (
     <>

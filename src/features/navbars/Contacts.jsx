@@ -9,7 +9,7 @@ export const ContactsNavbar = ({ name }) => {
   return (
     <Flex
       p='2'
-      px='4'
+      px={[2,null,4]}
       bg={bgColor}
       alignItems='center'
       justify='space-between'

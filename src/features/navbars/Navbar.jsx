@@ -31,7 +31,7 @@ export const NavBar = ({ socket }) => {
       top='0'
       height='8vh'
     >
-      <Text fontSize='lg'>mint.chat</Text>
+      <Text fontSize='lg'>nuance.chat</Text>
       <Flex alignItems='center'>
         <ColorModeToggleButton
           cursor='pointer'

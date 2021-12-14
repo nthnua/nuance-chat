@@ -114,7 +114,7 @@ const ChatPane = ({ socket }) => {
       flexDir='column'
       border='2px solid'
       borderColor={borderColor}
-      rounded='xl'
+      rounded={['md', null, 'xl']}
       grow='1'
       overflow='hidden'
       boxShadow='2xl'
