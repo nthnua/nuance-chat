@@ -18,7 +18,8 @@ try {
         error: {}
       },
       login: {
-        status: 'idle'
+        status: 'idle',
+        error: ''
       },
       logout: {
         status: 'idle'
@@ -86,13 +87,13 @@ const authSlice = createSlice({
         state.session.token = action.payload.token
         state.session.status = 'logged-in'
         state.session.id = action.payload.id
-        state.login.status = 'idle'
+        state.login.status = 'success'
         // when login store in localstorage
         window.localStorage.setItem('auth', JSON.stringify(state))
       })
       .addCase(requestLogin.rejected, (state, action) => {
-        state.login.status = 'idle'
-        state.session.error = action.error
+        state.login.status = 'failed'
+        state.login.error = action.error.message
       })
       .addCase(requestLogout.pending, (state, action) => {
         window.localStorage.removeItem('auth')

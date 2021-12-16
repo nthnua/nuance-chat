@@ -41,6 +41,7 @@ export const NavBar = ({ socket }) => {
         />
         <Button
           ml='5'
+          size='sm'
           onClick={() => {
             dispatch(requestLogout({ url, authToken }))
           }}

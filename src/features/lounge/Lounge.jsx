@@ -4,10 +4,8 @@ import ContactList from './ContactList'
 import { updateContacts, updateChats, addChat } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex, useBreakpointValue } from '@chakra-ui/react'
-import { Route } from 'react-router'
-import { Redirect, Switch } from 'react-router-dom'
-import ContactDiscovery from './ContactDiscovery'
-// import { backendUrl } from '../../service/config'
+import { Route, Redirect } from 'react-router-dom'
+import Profile from './Profile'
 
 export const Lounge = ({ socket }) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
@@ -89,18 +87,19 @@ export const Lounge = ({ socket }) => {
   return (
     <Flex w='100%' p={[1, null, 3]} height='92vh' direction='row'>
       <Route exact={isMobile} path='/'>
-        <ContactList contacts={contacts} />
+        <ContactList contacts={contacts} socket={socket} />
       </Route>
-      <Route sensitive path='/chat/:chatId'>
+      <Route path='/chat/:chatId'>
         <Flex grow='1'>
           <ChatPane socket={socket} />
         </Flex>
       </Route>
-      <Redirect
-        to={{
-          pathname: '/'
-        }}
-      />
+      <Route path='/profile/:userId'>
+        <Flex grow='1'>
+          <Profile />
+        </Flex>
+      </Route>
+      {/* <Redirect to='/' /> */}
     </Flex>
   )
 }

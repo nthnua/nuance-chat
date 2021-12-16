@@ -4,12 +4,16 @@ import { useHistory } from 'react-router'
 import { setActiveChatMeta } from './loungeSlice'
 import { useColorModeValue } from '@chakra-ui/color-mode'
 
-const Contact = ({ id, name, isActiveChat }) => {
+const Contact = ({ id, name, isActiveChat, fromSearch }) => {
   const hoverColor = useColorModeValue('green.200', 'green.600')
   const activeColor = useColorModeValue('green.100', 'green.500')
   const history = useHistory()
   const dispatch = useDispatch()
   const handleClick = () => {
+    if (fromSearch) {
+      history.push(`/profile/${id}`)
+      return
+    }
     history.push(`/chat/${id}`)
     dispatch(setActiveChatMeta({ id }))
   }
@@ -23,7 +27,7 @@ const Contact = ({ id, name, isActiveChat }) => {
       cursor={!isActiveChat && 'pointer'}
       bg={isActiveChat && activeColor}
       key={`p_${id}`}
-      m='1'
+      m='2'
       rounded='lg'
       transition='ease-in 100ms'
       _hover={!isActiveChat && { bgColor: hoverColor }}

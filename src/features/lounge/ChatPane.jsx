@@ -10,14 +10,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import ChatBubble from './ChatBubble'
 import { addChat, setActiveChatMeta } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
-import { useParams } from 'react-router'
 import { backendUrl } from '../../service/config'
 import { ContactsNavbar } from '../navbars/Contacts'
 import { Divider } from '@chakra-ui/layout'
 
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
-  const { chatId } = useParams()
+  const chatId = useSelector(state => state.lounge.activeChatMeta.id)
   const authToken = useSelector(state => state.auth.session.token)
   const userId = useSelector(state => state.auth.session.id)
   const chats = useSelector(state => {
