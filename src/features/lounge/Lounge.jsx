@@ -3,12 +3,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
 import { updateContacts, updateChats, addChat } from './loungeSlice'
 import ChatPane from './ChatPane'
-import { Flex, useBreakpointValue } from '@chakra-ui/react'
+import { Flex, useBreakpointValue, useColorModeValue } from '@chakra-ui/react'
 import { Route, Redirect } from 'react-router-dom'
 import Profile from './Profile'
 
 export const Lounge = ({ socket }) => {
+  // if device is a mobile or not
   const isMobile = useBreakpointValue({ base: true, md: false })
+
+  // colors
+  const bgColor = useColorModeValue('gray.100', 'gray.800')
+
   const dispatch = useDispatch()
   const authToken = useSelector(state => state.auth.session.token)
   const contacts = useSelector(state => state.lounge.contacts)
@@ -85,7 +90,7 @@ export const Lounge = ({ socket }) => {
   }, [dispatch, authToken, contactsStatus, contacts, socket])
 
   return (
-    <Flex w='100%' p={[1, null, 3]} height='92vh' direction='row'>
+    <Flex bg={bgColor} w='100%' p={[1, null, 3]} height='92vh' direction='row'>
       <Route exact={isMobile} path='/'>
         <ContactList contacts={contacts} socket={socket} />
       </Route>
@@ -99,7 +104,7 @@ export const Lounge = ({ socket }) => {
           <Profile />
         </Flex>
       </Route>
-      {/* <Redirect to='/' /> */}
+      <Redirect to='/' />
     </Flex>
   )
 }

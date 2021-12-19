@@ -1,6 +1,5 @@
 import { SearchIcon } from '@chakra-ui/icons'
 import {
-  Divider,
   Flex,
   Box,
   Input,
@@ -14,22 +13,23 @@ import { Discovery } from '../navbars/Discovery'
 import Contact from './Contact'
 
 function ContactDiscovery ({ setContactDisc, socket }) {
-  const borderColor = useColorModeValue('green.300', 'green.700')
-  const colorMode = window.localStorage.getItem('chakra-ui-color-mode')
+  const borderColor = useColorModeValue('white', 'gray.700')
+  const searchTextColor = useColorModeValue('gray.600', 'gray.300')
+  const bgColor = useColorModeValue('gray.100', 'blackAlpha.300')
 
-  const [searchText, setSearchText] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
 
   const selfId = useSelector(state => state.auth.session.id)
 
   useEffect(() => {
     socket.removeAllListeners('searchResults')
-    socket.on('searchResults', data => setSearchResults(data))
+    socket.on('searchResults', data => setSearchResults(data.searchResults))
   }, [socket])
 
-  const searchContact = (e) => {
+  const searchContact = e => {
     e.preventDefault()
-    socket.emit('searchContact', searchText)
+    socket.emit('searchContact', { searchQuery })
   }
 
   const CL = searchResults.map((contact, id) => {
@@ -62,19 +62,17 @@ function ContactDiscovery ({ setContactDisc, socket }) {
           flexDir='column'
         >
           <Discovery setContactDisc={setContactDisc} />
-          <Box m='2'>
+          <Box rounded='lg' overflow='hidden' m='3' mt='1'>
             <form onSubmit={searchContact}>
-              <InputGroup
-                rounded='md'
-                overflow='hidden'
-                bg={colorMode === 'dark' ? 'blackAlpha.300' : 'whiteAlpha.700'}
-              >
+              <InputGroup rounded='lg' overflow='hidden' bg={bgColor}>
                 <InputLeftElement pointerEvents='none'>
-                  <SearchIcon color='gray.300' />
+                  <SearchIcon color='gray.500' />
                 </InputLeftElement>
                 <Input
-                  value={searchText}
-                  onChange={e => setSearchText(e.target.value)}
+                  border='none'
+                  color={searchTextColor}
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
                   type='tel'
                   placeholder='Search away!'
                   rounded='lg'
@@ -83,7 +81,6 @@ function ContactDiscovery ({ setContactDisc, socket }) {
               </InputGroup>
             </form>
           </Box>
-          <Divider />
           <Flex flexDir='column' overflow='auto'>
             {/* <FeelingLucky /> */}
             {CL}

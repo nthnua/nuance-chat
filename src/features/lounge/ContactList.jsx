@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, IconButton } from '@chakra-ui/react'
+import { Box, Flex, IconButton } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import Contact from './Contact'
 import { useColorModeValue } from '@chakra-ui/color-mode'
@@ -9,7 +9,7 @@ import { useState } from 'react'
 
 const ContactList = ({ contacts, socket }) => {
   const [contactDisc, setContactDisc] = useState(false)
-  const borderColor = useColorModeValue('green.300', 'green.700')
+  const borderColor = useColorModeValue('white', 'gray.700')
   const selfId = useSelector(state => state.auth.session.id)
   const activeChatId = useSelector(state => state.lounge.activeChatMeta.id)
 
@@ -66,7 +66,6 @@ const ContactList = ({ contacts, socket }) => {
             flexDir='column'
           >
             <ChatNavbar />
-            <Divider />
             <Flex flexDir='column' overflow='auto'>
               {CL}
             </Flex>
