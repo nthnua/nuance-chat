@@ -13,13 +13,12 @@ import { ProfileNav } from '../navbars/Profile'
 function Profile () {
   const { userId } = useParams()
 
-  const borderColor = useColorModeValue('#87E0E1', '#5A8D98')
+  const bgColor = useColorModeValue('white', 'gray.700')
 
   return (
     <Flex
       flexDir='column'
-      border='2px solid'
-      borderColor={borderColor}
+      bgColor={bgColor}
       rounded={['md', null, 'xl']}
       alignItems='center'
       grow='1'

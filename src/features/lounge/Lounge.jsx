@@ -104,7 +104,10 @@ export const Lounge = ({ socket }) => {
           <Profile />
         </Flex>
       </Route>
-      <Redirect to='/' />
+      {/* 👇 if no URL match is found */}
+      <Route path='*'>
+        <Redirect to='/' />
+      </Route>
     </Flex>
   )
 }

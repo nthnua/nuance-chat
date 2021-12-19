@@ -14,7 +14,7 @@ import Contact from './Contact'
 
 function ContactDiscovery ({ setContactDisc, socket }) {
   const borderColor = useColorModeValue('white', 'gray.700')
-  const searchTextColor = useColorModeValue('gray.600', 'gray.300')
+  const searchTextColor = useColorModeValue('gray.700', 'gray.200')
   const bgColor = useColorModeValue('gray.100', 'blackAlpha.300')
 
   const [searchQuery, setSearchQuery] = useState('')
@@ -74,7 +74,7 @@ function ContactDiscovery ({ setContactDisc, socket }) {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   type='tel'
-                  placeholder='Search away!'
+                  placeholder='Enter a username'
                   rounded='lg'
                   overflow='hidden'
                 />

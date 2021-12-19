@@ -12,7 +12,6 @@ import { addChat, setActiveChatMeta } from './loungeSlice'
 import { IoSend } from 'react-icons/io5'
 import { backendUrl } from '../../service/config'
 import { ContactsNavbar } from '../navbars/Contacts'
-import { Divider } from '@chakra-ui/layout'
 
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
@@ -28,7 +27,8 @@ const ChatPane = ({ socket }) => {
     c => c.id === chatId
   )?.name
   const bubbleColor = useColorModeValue('green.200', 'green.700')
-  const borderColor = useColorModeValue('#87E0E1', '#5A8D98')
+  const bgColor = useColorModeValue('white', 'gray.700')
+  const chatInputBgColor = useColorModeValue('gray.100', 'gray.800')
 
   // const [connection, setConnection] = useState(null);
   const [message, setMessage] = useState('')
@@ -111,9 +111,8 @@ const ChatPane = ({ socket }) => {
   return (
     <Flex
       flexDir='column'
-      border='2px solid'
-      borderColor={borderColor}
-      rounded={['md', null, 'xl']}
+      bgColor={bgColor}
+      rounded={['lg', null, 'xl']}
       grow='1'
       overflow='hidden'
       boxShadow='2xl'
@@ -132,19 +131,24 @@ const ChatPane = ({ socket }) => {
         {/* 👇 dummy div to scroll to bottom of the chat on sending message */}
         <div ref={chatRef} />
       </Flex>
+      {/* <Divider /> */}
       <Box>
-        <Divider />
         <form onSubmit={handleSubmit}>
-          <Flex p='2'>
+          <Flex py='2' px='1'>
             <Input
-              colorScheme='green'
+              border='none'
+              bgColor={chatInputBgColor}
+              placeholder='Type a message'
+              borderColor={useColorModeValue('gray.400', 'gray.500')}
+              rounded='full'
               value={message}
               onChange={e => setMessage(e.target.value)}
               mx='1'
-              px='2'
+              // px='3'
               autoFocus
             />
             <IconButton
+              rounded='full'
               colorScheme='green'
               type='submit'
               mx='1'
