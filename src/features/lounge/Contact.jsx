@@ -11,7 +11,7 @@ const Contact = ({ id, name, isActiveChat, fromSearch, realName }) => {
   const dispatch = useDispatch()
   const handleClick = () => {
     if (fromSearch) {
-      history.push(`/profile/${name}`)
+      history.push(realName ? `/profile/${name}?realName=${realName}` : `/profile/${name}`)
       return
     }
     history.push(`/chat/${id}`)

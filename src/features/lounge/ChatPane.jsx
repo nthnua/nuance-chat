@@ -3,7 +3,8 @@ import {
   Input,
   IconButton,
   useColorModeValue,
-  Box
+  Box,
+  Divider
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,7 +29,7 @@ const ChatPane = ({ socket }) => {
   )?.name
   const bubbleColor = useColorModeValue('green.200', 'green.700')
   const bgColor = useColorModeValue('white', 'gray.700')
-  const chatInputBgColor = useColorModeValue('gray.100', 'gray.800')
+  const chatInputBgColor = useColorModeValue('gray.200', 'gray.800')
 
   // const [connection, setConnection] = useState(null);
   const [message, setMessage] = useState('')
@@ -131,7 +132,7 @@ const ChatPane = ({ socket }) => {
         {/* 👇 dummy div to scroll to bottom of the chat on sending message */}
         <div ref={chatRef} />
       </Flex>
-      {/* <Divider /> */}
+      <Divider />
       <Box>
         <form onSubmit={handleSubmit}>
           <Flex py='2' px='1'>
@@ -139,7 +140,6 @@ const ChatPane = ({ socket }) => {
               border='none'
               bgColor={chatInputBgColor}
               placeholder='Type a message'
-              borderColor={useColorModeValue('gray.400', 'gray.500')}
               rounded='full'
               value={message}
               onChange={e => setMessage(e.target.value)}

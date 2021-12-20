@@ -21,7 +21,7 @@ function ContactDiscovery ({ setContactDisc, socket }) {
 
   useEffect(() => {
     socket.removeAllListeners('searchResults')
-    socket.on('searchResults', data => { console.log(data); setSearchResults(data.searchResults) })
+    socket.on('searchResults', data => setSearchResults(data.searchResults))
   }, [socket])
 
   // const searchContact = e => {
@@ -35,7 +35,6 @@ function ContactDiscovery ({ setContactDisc, socket }) {
         key={idx}
         fromSearch
         realName={contact.realName}
-        // use={contact.username}
         name={contact.username}
       />
     )
@@ -58,7 +57,7 @@ function ContactDiscovery ({ setContactDisc, socket }) {
           flexDir='column'
         >
           <Discovery setContactDisc={setContactDisc} />
-          <Box rounded='lg' overflow='hidden' m='3' mt='1'>
+          <Box rounded='lg' overflow='hidden' mx='3' my='1'>
             <InputGroup rounded='lg' overflow='hidden' bg={bgColor}>
               <InputLeftElement pointerEvents='none'>
                 <SearchIcon color='gray.500' />
@@ -67,10 +66,13 @@ function ContactDiscovery ({ setContactDisc, socket }) {
                 border='none'
                 color={searchTextColor}
                 // value={searchQuery}
-                onChange={e =>
-                  socket.emit('searchContact', {
-                    searchQuery: e.target.value
-                  })}
+                onChange={e => {
+                  if (e.target.value.length > 0) {
+                    socket.emit('searchContact', {
+                      searchQuery: e.target.value
+                    })
+                  }
+                }}
                 type='tel'
                 placeholder='Enter a username'
                 rounded='lg'
