@@ -8,7 +8,6 @@ import {
   useColorModeValue
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { Discovery } from '../navbars/Discovery'
 import Contact from './Contact'
 
@@ -17,31 +16,28 @@ function ContactDiscovery ({ setContactDisc, socket }) {
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
   const bgColor = useColorModeValue('gray.100', 'blackAlpha.300')
 
-  const [searchQuery, setSearchQuery] = useState('')
+  // const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
-
-  const selfId = useSelector(state => state.auth.session.id)
 
   useEffect(() => {
     socket.removeAllListeners('searchResults')
-    socket.on('searchResults', data => setSearchResults(data.searchResults))
+    socket.on('searchResults', data => { console.log(data); setSearchResults(data.searchResults) })
   }, [socket])
 
-  const searchContact = e => {
-    e.preventDefault()
-    socket.emit('searchContact', { searchQuery })
-  }
+  // const searchContact = e => {
+  //   e.preventDefault()
+  //   socket.emit('searchContact', { searchQuery })
+  // }
 
-  const CL = searchResults.map((contact, id) => {
+  const CL = searchResults.map((contact, idx) => {
     return (
-      contact.id !== selfId && (
-        <Contact
-          key={id}
-          id={contact.id}
-          name={contact.name}
-          peerId={contact.peerId}
-        />
-      )
+      <Contact
+        key={idx}
+        fromSearch
+        realName={contact.realName}
+        // use={contact.username}
+        name={contact.username}
+      />
     )
   })
 
@@ -63,23 +59,24 @@ function ContactDiscovery ({ setContactDisc, socket }) {
         >
           <Discovery setContactDisc={setContactDisc} />
           <Box rounded='lg' overflow='hidden' m='3' mt='1'>
-            <form onSubmit={searchContact}>
-              <InputGroup rounded='lg' overflow='hidden' bg={bgColor}>
-                <InputLeftElement pointerEvents='none'>
-                  <SearchIcon color='gray.500' />
-                </InputLeftElement>
-                <Input
-                  border='none'
-                  color={searchTextColor}
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  type='tel'
-                  placeholder='Enter a username'
-                  rounded='lg'
-                  overflow='hidden'
-                />
-              </InputGroup>
-            </form>
+            <InputGroup rounded='lg' overflow='hidden' bg={bgColor}>
+              <InputLeftElement pointerEvents='none'>
+                <SearchIcon color='gray.500' />
+              </InputLeftElement>
+              <Input
+                border='none'
+                color={searchTextColor}
+                // value={searchQuery}
+                onChange={e =>
+                  socket.emit('searchContact', {
+                    searchQuery: e.target.value
+                  })}
+                type='tel'
+                placeholder='Enter a username'
+                rounded='lg'
+                overflow='hidden'
+              />
+            </InputGroup>
           </Box>
           <Flex flexDir='column' overflow='auto'>
             {/* <FeelingLucky /> */}
