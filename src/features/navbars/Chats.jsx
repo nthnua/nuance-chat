@@ -7,7 +7,7 @@ export const ChatNavbar = () => {
 
   return (
     <div>
-      <Flex p='3' w='100%'>
+      <Flex p={[2, null, 3]} w='100%'>
         <InputGroup rounded='lg' overflow='hidden' bg='transparent'>
           <InputLeftElement pointerEvents='none'>
             <SearchIcon color='gray.500' />

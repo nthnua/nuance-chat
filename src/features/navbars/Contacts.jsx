@@ -10,7 +10,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useHistory } from 'react-router'
 export const ContactsNavbar = ({ name }) => {
   const history = useHistory()
-  const bgColor = useColorModeValue('gray.200', 'gray.600')
+  const bgColor = useColorModeValue('gray.300', 'gray.600')
 
   return (
     <Flex
