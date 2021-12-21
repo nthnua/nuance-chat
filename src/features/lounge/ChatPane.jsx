@@ -58,14 +58,19 @@ const ChatPane = ({ socket }) => {
   useEffect(() => {
     if (chats.length !== 0) {
       setChatBubbles(
-        chats.map((chat, id) => (
-          <ChatBubble
-            key={id}
-            text={chat.content}
-            sender={chat.sender === userId}
-            color={bubbleColor}
-          />
-        ))
+        chats.map((chat, id) => {
+          if (chat.type !== 'friendRequest') {
+            return (
+              <ChatBubble
+                key={id}
+                text={chat.content}
+                sender={chat.sender === userId}
+                color={bubbleColor}
+              />
+            )
+          }
+          return null
+        })
       )
     }
 
@@ -99,7 +104,8 @@ const ChatPane = ({ socket }) => {
         reciever: chatId,
         content: message,
         time: Date.now(),
-        status: 0
+        status: 0,
+        type: 'chatMessage'
       }
       dispatch(addChat({ chatId, data }))
       socket.emit('chatMessage', data, recievedData => {

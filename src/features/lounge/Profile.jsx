@@ -1,11 +1,15 @@
-import { AddIcon } from '@chakra-ui/icons'
+import { AddIcon, CheckIcon } from '@chakra-ui/icons'
 import { Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams, useLocation } from 'react-router-dom'
 import { ProfileNav } from '../navbars/Profile'
 
-function Profile () {
+function Profile ({ socket }) {
   const { userId } = useParams()
+  const selfId = useSelector(state => state.auth.session.id)
+  const [requestSent, setRequestSent] = useState(false)
+
   const useQuery = () => {
     const { search } = useLocation()
     return React.useMemo(() => new URLSearchParams(search), [search])
@@ -14,7 +18,12 @@ function Profile () {
   const bgColor = useColorModeValue('white', 'gray.700')
 
   const handleClick = () => {
-    // dispatch some redux thingamajig to send friend request
+    const data = {
+      reciever: userId,
+      sender: selfId,
+      type: 'friendRequest'
+    }
+    socket.emit('chatMessage', data, recievedData => setRequestSent(true))
   }
 
   return (
@@ -33,9 +42,17 @@ function Profile () {
         {query.get('realName')}
       </Text>
       <Box m='3'>
-        <Button leftIcon={<AddIcon />} onClick={handleClick}>
-          Add friend
-        </Button>
+        {requestSent
+          ? (
+            <Button leftIcon={<CheckIcon />} disabled>
+              Request Sent
+            </Button>
+            )
+          : (
+            <Button leftIcon={<AddIcon />} onClick={handleClick}>
+              Add friend
+            </Button>
+            )}
       </Box>
     </Flex>
   )
