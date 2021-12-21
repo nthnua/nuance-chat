@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -13,10 +13,8 @@ import {
   Button,
   Grid,
   GridItem,
-  Alert,
-  AlertIcon,
-  AlertDescription,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/react'
 import { backendUrl } from '../../../service/config'
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,16 +26,44 @@ function RegisterModal ({ isOpen, onClose }) {
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
   const [realName, setRealName] = useState('')
+
   const url = `${backendUrl}/api/signup`
+
   const signupStatus = useSelector(state => state.auth.signup.status)
   const signupMessage = useSelector(state => state.auth.signup.message)
-  const signupErrorStatus = useSelector(state => state.auth.signup.error)
+
   const dispatch = useDispatch()
+  const toast = useToast()
+
   const registerUser = e => {
     e.preventDefault()
     // not so fancy redux stuff
     dispatch(requestSignup({ url, username, age, email, realName, password }))
   }
+
+  useEffect(() => {
+    toast.closeAll()
+    if (signupStatus === 'pending') {
+      toast({
+        title: 'Hold tight!',
+        description: 'Logging you in',
+        status: 'info',
+        duration: 4000,
+        isClosable: true
+      })
+    }
+    if (signupStatus === 'rejected') {
+      toast({
+        title: 'Oops!',
+        description: signupMessage,
+        status: 'error',
+        duration: 7000,
+        isClosable: true
+      })
+    }
+
+    return () => toast.closeAll()
+  }, [signupStatus, signupMessage, toast])
 
   const initialRef = useRef()
   return (
@@ -52,7 +78,9 @@ function RegisterModal ({ isOpen, onClose }) {
       <ModalContent>
         <form onSubmit={registerUser}>
           <ModalHeader>
-            {signupStatus === 'success' ? 'Successfully registered!' : 'Create your account'}
+            {signupStatus === 'success'
+              ? 'Successfully registered!'
+              : 'Create your account'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
@@ -67,13 +95,6 @@ function RegisterModal ({ isOpen, onClose }) {
                 )
               : (
                 <>
-                  {signupErrorStatus && (
-                    <Alert status='error' mb={4}>
-                      <AlertIcon />
-
-                      <AlertDescription>{signupMessage}</AlertDescription>
-                    </Alert>
-                  )}
                   <FormControl isRequired>
                     <FormLabel>Username</FormLabel>
                     <Input
@@ -128,11 +149,10 @@ function RegisterModal ({ isOpen, onClose }) {
                 )}
           </ModalBody>
 
-          {!(signupStatus === 'success') && (
+          {signupStatus !== 'success' && (
             <ModalFooter>
               <Button
-                isLoading={signupStatus === 'pending'}
-                loadingText='Registering...'
+                disabled={signupStatus === 'pending'}
                 type='submit'
                 colorScheme='teal'
                 mr={3}

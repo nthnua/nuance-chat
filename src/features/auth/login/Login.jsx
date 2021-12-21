@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { requestLogin } from '../authSlice'
 import { backendUrl } from '../../../service/config'
-import { Divider, Link } from '@chakra-ui/layout'
+import { Divider } from '@chakra-ui/layout'
 import RegisterModal from './RegisterModal'
 
 export const LoginPage = () => {
@@ -40,16 +40,36 @@ export const LoginPage = () => {
   }
 
   useEffect(() => {
+    toast.closeAll()
+    if (loginStatus === 'pending') {
+      toast({
+        title: 'Hold tight!',
+        description: 'Logging you in',
+        status: 'info',
+        duration: 3000,
+        isClosable: true
+      })
+    }
+    if (loginStatus === 'success') {
+      toast({
+        title: "You're in!",
+        description: 'Happy chatting',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      })
+    }
     if (loginStatus === 'failed') {
-      toast.closeAll()
       toast({
         title: 'Oops!',
         description: 'Incorrect username or password',
         status: 'error',
-        duration: 7000,
+        duration: 5000,
         isClosable: true
       })
     }
+
+    return () => toast.closeAll()
   }, [loginStatus, toast])
   return (
     <>
@@ -100,13 +120,15 @@ export const LoginPage = () => {
               colorScheme='teal'
               alignSelf='flex-start'
               type='submit'
+              disabled={loginStatus === 'pending'}
             >
               Login
               <ArrowForwardIcon mx='2' />
             </Button>
+            {/* temporarily commented out for web-dev demo
             <Link mt='-3' fontSize='sm'>
               Forgot password
-            </Link>
+            </Link> */}
             <Divider />
             <Flex flexDir='column'>
               <Text fontWeight='light' mb='3'>
