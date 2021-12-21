@@ -8,6 +8,7 @@ import {
   useColorModeValue
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Discovery } from '../navbars/Discovery'
 import Contact from './Contact'
 
@@ -15,6 +16,8 @@ function ContactDiscovery ({ contacts, setContactDisc, socket }) {
   const borderColor = useColorModeValue('white', 'gray.700')
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
   const bgColor = useColorModeValue('gray.100', 'blackAlpha.300')
+
+  const selfId = useSelector(state => state.auth.session.id)
 
   const [searchResults, setSearchResults] = useState([])
 
@@ -24,7 +27,7 @@ function ContactDiscovery ({ contacts, setContactDisc, socket }) {
   }, [socket])
 
   const CL = searchResults.map((contact, idx) => {
-    if (contacts.filter(c => c.id === contact.username).length === 0) {
+    if (contacts.filter(c => c.id === contact.username).length === 0 && contact.username !== selfId) {
       return (
         <Contact
           key={idx}

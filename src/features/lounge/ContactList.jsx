@@ -17,7 +17,6 @@ import FriendRequest from './FriendRequest'
 
 const ContactList = ({ contacts, socket, friendRequests }) => {
   const [contactDisc, setContactDisc] = useState(false)
-  const [localContacts, setLocalContacts] = useState(contacts)
 
   const borderColor = useColorModeValue('white', 'gray.700')
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
@@ -25,7 +24,7 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
   const selfId = useSelector(state => state.auth.session.id)
   const activeChatId = useSelector(state => state.lounge.activeChatMeta.id)
 
-  const CL = localContacts?.map((contact, id) => {
+  const CL = contacts?.map((contact, id) => {
     const isActiveChat = contact.id === activeChatId
     return (
       contact.id !== selfId && (
@@ -51,10 +50,6 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
       />
     )
   })
-
-  const handleChange = (text) => {
-    setLocalContacts(p => p.filter(c => c.name.includes(text)))
-  }
 
   return contactDisc
     ? (
@@ -111,7 +106,6 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
                   placeholder='Search away!'
                   rounded='lg'
                   overflow='hidden'
-                  onChange={(e) => handleChange(e.target.value)}
                 />
               </InputGroup>
             </Flex>
