@@ -1,19 +1,31 @@
-import { Box, Flex, IconButton } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  Flex,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement
+} from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import Contact from './Contact'
 import { useColorModeValue } from '@chakra-ui/color-mode'
-import { ChatNavbar } from '../navbars/Chats'
-import { AddIcon } from '@chakra-ui/icons'
+import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import ContactDiscovery from './ContactDiscovery'
 import { useState } from 'react'
+import FriendRequest from './FriendRequest'
 
-const ContactList = ({ contacts, socket }) => {
+const ContactList = ({ contacts, socket, friendRequests }) => {
   const [contactDisc, setContactDisc] = useState(false)
+  const [localContacts, setLocalContacts] = useState(contacts)
+
   const borderColor = useColorModeValue('white', 'gray.700')
+  const searchTextColor = useColorModeValue('gray.700', 'gray.200')
+
   const selfId = useSelector(state => state.auth.session.id)
   const activeChatId = useSelector(state => state.lounge.activeChatMeta.id)
 
-  const CL = contacts.map((contact, id) => {
+  const CL = localContacts?.map((contact, id) => {
     const isActiveChat = contact.id === activeChatId
     return (
       contact.id !== selfId && (
@@ -27,9 +39,30 @@ const ContactList = ({ contacts, socket }) => {
       )
     )
   })
+
+  const FR = friendRequests?.map((friendRequest, idx) => {
+    return (
+      <FriendRequest
+        socket={socket}
+        key={idx}
+        sender={friendRequest.sender}
+        id={friendRequest._id}
+        reciever={friendRequest.reciever}
+      />
+    )
+  })
+
+  const handleChange = (text) => {
+    setLocalContacts(p => p.filter(c => c.name.includes(text)))
+  }
+
   return contactDisc
     ? (
-      <ContactDiscovery socket={socket} setContactDisc={setContactDisc} />
+      <ContactDiscovery
+        socket={socket}
+        contacts={contacts}
+        setContactDisc={setContactDisc}
+      />
       )
     : (
       <Flex minW='35vw' grow={['1', null, '0']}>
@@ -65,8 +98,26 @@ const ContactList = ({ contacts, socket }) => {
             backgroundColor={borderColor}
             flexDir='column'
           >
-            <ChatNavbar />
+            <Flex p={[2, null, 3]} w='100%'>
+              <InputGroup rounded='lg' overflow='hidden' bg='transparent'>
+                <InputLeftElement pointerEvents='none'>
+                  <SearchIcon color='gray.500' />
+                </InputLeftElement>
+                <Input
+                  _focus={{ boxShadow: 'none' }}
+                  border='none'
+                  color={searchTextColor}
+                  type='tel'
+                  placeholder='Search away!'
+                  rounded='lg'
+                  overflow='hidden'
+                  onChange={(e) => handleChange(e.target.value)}
+                />
+              </InputGroup>
+            </Flex>
+            <Divider />
             <Flex flexDir='column' overflow='auto'>
+              {FR}
               {CL}
             </Flex>
           </Flex>

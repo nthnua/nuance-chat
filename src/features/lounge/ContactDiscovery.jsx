@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { Discovery } from '../navbars/Discovery'
 import Contact from './Contact'
 
-function ContactDiscovery ({ setContactDisc, socket }) {
+function ContactDiscovery ({ contacts, setContactDisc, socket }) {
   const borderColor = useColorModeValue('white', 'gray.700')
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
   const bgColor = useColorModeValue('gray.100', 'blackAlpha.300')
@@ -24,14 +24,17 @@ function ContactDiscovery ({ setContactDisc, socket }) {
   }, [socket])
 
   const CL = searchResults.map((contact, idx) => {
-    return (
-      <Contact
-        key={idx}
-        fromSearch
-        realName={contact.realName}
-        name={contact.username}
-      />
-    )
+    if (contacts.filter(c => c.id === contact.username).length === 0) {
+      return (
+        <Contact
+          key={idx}
+          fromSearch
+          realName={contact.realName}
+          name={contact.username}
+        />
+      )
+    }
+    return null
   })
 
   return (

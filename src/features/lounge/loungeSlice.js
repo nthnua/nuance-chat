@@ -12,7 +12,8 @@ const initialState = {
   activeChatMeta: {
     id: ''
   },
-  activeChat: []
+  activeChat: [],
+  friendRequests: []
 }
 
 export const fetchContacts = createAsyncThunk(
@@ -73,6 +74,9 @@ const loungeSlice = createSlice({
       //   }
       // })
     },
+    addFriendRequest: (state, action) => {
+      state.friendRequests.push(action.payload)
+    },
     updateChats: (state, action) => {
       state.contacts = state.contacts.map((contact, index) => {
         if (contact.id === action.payload.chatId) {
@@ -94,6 +98,10 @@ const loungeSlice = createSlice({
     updateContacts: (state, action) => {
       state.contacts = action.payload.contacts
       state.contactsStatus = 'loaded'
+    },
+    removeFriendRequest: (state, action) => {
+      console.log(action.payload)
+      state.friendRequests = state.friendRequests.filter(friendReq => friendReq._id !== action.payload._id)
     }
   },
   extraReducers: builder =>
@@ -137,7 +145,9 @@ export const {
   setActiveChatMeta,
   addContact,
   updateContacts,
-  updateChats
+  updateChats,
+  addFriendRequest,
+  removeFriendRequest
 } = loungeSlice.actions
 
 export default loungeSlice.reducer

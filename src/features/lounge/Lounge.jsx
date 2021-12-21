@@ -1,7 +1,13 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
-import { updateContacts, updateChats, addChat } from './loungeSlice'
+import {
+  updateContacts,
+  updateChats,
+  addChat,
+  addFriendRequest,
+  addContact
+} from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex, useBreakpointValue, useColorModeValue } from '@chakra-ui/react'
 import { Route, Redirect } from 'react-router-dom'
@@ -19,13 +25,18 @@ export const Lounge = ({ socket }) => {
   const contacts = useSelector(state => state.lounge.contacts)
   const chatId = useSelector(state => state.lounge.activeChatMeta.id)
   const contactsStatus = useSelector(state => state.lounge.contactsStatus)
+  const friendRequests = useSelector(state => state.lounge.friendRequests)
   // const url = `${backendUrl}/api/lounge`
   // const socket = io(backendUrl, {
   //   auth: {
   //     token: authToken
   //   }
   // })
-  useEffect(() => {}, [socket])
+  useEffect(() => {
+    if (contactsStatus === 'loaded') {
+      socket.emit('loadComplete')
+    }
+  }, [contactsStatus, socket])
 
   useEffect(() => {
     socket.once('initialContacts', (contacts, acknowledge) => {
@@ -57,14 +68,8 @@ export const Lounge = ({ socket }) => {
     // once every chatMessage contacts state gets updated
     socket.removeAllListeners('chatMessage')
     socket.on('chatMessage', data => {
-      socket.emit('deliveryReport', {
-        _id: data._id,
-        sender: data.sender,
-        status: 2
-      })
       // TODO: handle this somewhere else
       if (contacts.some(contact => contact.id === data.sender)) {
-        console.log('yes')
         console.log(data)
         dispatch(
           addChat({
@@ -72,8 +77,13 @@ export const Lounge = ({ socket }) => {
             data
           })
         )
-      } else {
-        console.log(data)
+        socket.emit('deliveryReport', {
+          _id: data._id,
+          sender: data.sender,
+          status: 2
+        })
+      } else if (data.type === 'friendRequest') {
+        dispatch(addFriendRequest(data))
       }
       // else {
       //   dispatch(
@@ -91,10 +101,21 @@ export const Lounge = ({ socket }) => {
     })
   }, [dispatch, authToken, contactsStatus, contacts, socket])
 
+  useEffect(() => {
+    socket.removeAllListeners('newContact')
+    socket.on('newContact', data => {
+      dispatch(addContact(data))
+    })
+  }, [dispatch, socket])
+
   return (
     <Flex bg={bgColor} w='100%' p={[1, null, 3]} height='92vh' direction='row'>
       <Route exact={isMobile} path='/'>
-        <ContactList contacts={contacts} socket={socket} />
+        <ContactList
+          friendRequests={friendRequests}
+          contacts={contacts}
+          socket={socket}
+        />
       </Route>
       <Route path='/chat/:chatId'>
         <Flex grow='1'>
