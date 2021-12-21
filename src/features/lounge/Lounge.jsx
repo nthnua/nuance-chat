@@ -3,12 +3,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import ContactList from './ContactList'
 import { updateContacts, updateChats, addChat } from './loungeSlice'
 import ChatPane from './ChatPane'
-import { Flex, useBreakpointValue } from '@chakra-ui/react'
-import { Route } from 'react-router'
-// import { backendUrl } from '../../service/config'
+import { Flex, useBreakpointValue, useColorModeValue } from '@chakra-ui/react'
+import { Route, Redirect } from 'react-router-dom'
+import Profile from './Profile'
 
 export const Lounge = ({ socket }) => {
+  // if device is a mobile or not
   const isMobile = useBreakpointValue({ base: true, md: false })
+
+  // colors
+  const bgColor = useColorModeValue('gray.100', 'gray.800')
+
   const dispatch = useDispatch()
   const authToken = useSelector(state => state.auth.session.token)
   const contacts = useSelector(state => state.lounge.contacts)
@@ -85,16 +90,23 @@ export const Lounge = ({ socket }) => {
   }, [dispatch, authToken, contactsStatus, contacts, socket])
 
   return (
-    <Flex w='100%' p={[2, null, 3]} height='92vh' direction='row'>
+    <Flex bg={bgColor} w='100%' p={[1, null, 3]} height='92vh' direction='row'>
       <Route exact={isMobile} path='/'>
-        <Flex minW='35vw' grow={['1', null, '0']}>
-          <ContactList contacts={contacts} />
-        </Flex>
+        <ContactList contacts={contacts} socket={socket} />
       </Route>
       <Route path='/chat/:chatId'>
         <Flex grow='1'>
           <ChatPane socket={socket} />
         </Flex>
+      </Route>
+      <Route path='/profile/:userId'>
+        <Flex grow='1'>
+          <Profile />
+        </Flex>
+      </Route>
+      {/* 👇 if no URL match is found */}
+      <Route path='*'>
+        <Redirect to='/' />
       </Route>
     </Flex>
   )

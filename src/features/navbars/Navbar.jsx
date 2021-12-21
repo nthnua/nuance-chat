@@ -1,12 +1,11 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { Flex, useColorMode, Text, useColorModeValue } from '@chakra-ui/react'
+import { Flex, useColorMode, Text } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { requestLogout } from '../auth/authSlice'
 import { backendUrl } from '../../service/config'
 
 export const NavBar = ({ socket }) => {
-  const bgColor = useColorModeValue('green.100', 'green.400')
   const dispatch = useDispatch()
   const colorMode = window.localStorage.getItem('chakra-ui-color-mode')
   const authToken = useSelector(state => state.auth.session.token)
@@ -23,7 +22,8 @@ export const NavBar = ({ socket }) => {
     <Flex
       py='3'
       px='5'
-      bg={bgColor}
+      bg='green.600'
+      color='white'
       justifyContent='space-between'
       alignItems='center'
       position='sticky'
@@ -31,7 +31,7 @@ export const NavBar = ({ socket }) => {
       top='0'
       height='8vh'
     >
-      <Text fontSize='lg'>mint.chat</Text>
+      <Text fontSize='lg'>nuance.chat</Text>
       <Flex alignItems='center'>
         <ColorModeToggleButton
           cursor='pointer'
@@ -40,7 +40,9 @@ export const NavBar = ({ socket }) => {
           _hover={{ transform: 'rotate(180deg) scale(1.2)' }}
         />
         <Button
+          colorScheme='green'
           ml='5'
+          size='sm'
           onClick={() => {
             dispatch(requestLogout({ url, authToken }))
           }}

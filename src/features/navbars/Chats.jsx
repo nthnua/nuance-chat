@@ -1,27 +1,29 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import { Flex } from '@chakra-ui/react'
+import { Divider, Flex, useColorModeValue } from '@chakra-ui/react'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
 
 export const ChatNavbar = () => {
-  const colorMode = window.localStorage.getItem('chakra-ui-color-mode')
+  const textColor = useColorModeValue('gray.700', 'gray.200')
 
   return (
-    <Flex p='1.5' w='100%'>
-      <InputGroup
-        rounded='lg'
-        overflow='hidden'
-        bg={colorMode === 'dark' ? 'blackAlpha.300' : 'whiteAlpha.700'}
-      >
-        <InputLeftElement pointerEvents='none'>
-          <SearchIcon color='gray.300' />
-        </InputLeftElement>
-        <Input
-          type='tel'
-          placeholder='Search away!'
-          rounded='lg'
-          overflow='hidden'
-        />
-      </InputGroup>
-    </Flex>
+    <div>
+      <Flex p={[2, null, 3]} w='100%'>
+        <InputGroup rounded='lg' overflow='hidden' bg='transparent'>
+          <InputLeftElement pointerEvents='none'>
+            <SearchIcon color='gray.500' />
+          </InputLeftElement>
+          <Input
+            _focus={{ boxShadow: 'none' }}
+            border='none'
+            color={textColor}
+            type='tel'
+            placeholder='Search away!'
+            rounded='lg'
+            overflow='hidden'
+          />
+        </InputGroup>
+      </Flex>
+      <Divider />
+    </div>
   )
 }

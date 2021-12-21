@@ -8,11 +8,12 @@ import {
   useColorModeValue,
   Text,
   Heading,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { requestLogin } from '../authSlice'
 import { backendUrl } from '../../../service/config'
 import { Divider, Link } from '@chakra-ui/layout'
@@ -20,7 +21,7 @@ import RegisterModal from './RegisterModal'
 
 export const LoginPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const toast = useToast()
   // local state
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -28,6 +29,7 @@ export const LoginPage = () => {
   // colors
   const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
   const pageBg = useColorModeValue('#87E0E1', '#5A8D98')
+  const loginStatus = useSelector(state => state.auth.login.status)
   // redux dispatcher
   const dispatch = useDispatch()
   // handle form submission
@@ -36,6 +38,19 @@ export const LoginPage = () => {
     e.stopPropagation()
     dispatch(requestLogin({ url, username, password }))
   }
+
+  useEffect(() => {
+    if (loginStatus === 'failed') {
+      toast.closeAll()
+      toast({
+        title: 'Oops!',
+        description: 'Incorrect username or password',
+        status: 'error',
+        duration: 7000,
+        isClosable: true
+      })
+    }
+  }, [loginStatus, toast])
   return (
     <>
       <RegisterModal onClose={onClose} isOpen={isOpen} />

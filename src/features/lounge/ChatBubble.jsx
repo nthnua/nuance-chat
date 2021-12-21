@@ -9,7 +9,7 @@ const ChatBubble = ({ text, sender, color }) => {
       py='2'
       mx='2'
       mb='1'
-      bgGradient={`linear(to-br,${sender ? color : bgColor}, ${
+      bgGradient={`linear(to-tr,${sender ? color : bgColor}, ${
         sender ? 'rgba(0,255,0,0.2)' : 'rgba(0,128,128, 0.2)'
       })`}
       bgColor={sender ? color : bgColor}
