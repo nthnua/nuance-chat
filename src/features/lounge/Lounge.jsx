@@ -72,6 +72,8 @@ export const Lounge = ({ socket }) => {
             data
           })
         )
+      } else {
+        console.log(data)
       }
       // else {
       //   dispatch(
@@ -101,7 +103,7 @@ export const Lounge = ({ socket }) => {
       </Route>
       <Route path='/profile/:userId'>
         <Flex grow='1'>
-          <Profile />
+          <Profile socket={socket} />
         </Flex>
       </Route>
       {/* 👇 if no URL match is found */}

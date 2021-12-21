@@ -16,18 +16,12 @@ function ContactDiscovery ({ setContactDisc, socket }) {
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
   const bgColor = useColorModeValue('gray.100', 'blackAlpha.300')
 
-  // const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
 
   useEffect(() => {
     socket.removeAllListeners('searchResults')
     socket.on('searchResults', data => setSearchResults(data.searchResults))
   }, [socket])
-
-  // const searchContact = e => {
-  //   e.preventDefault()
-  //   socket.emit('searchContact', { searchQuery })
-  // }
 
   const CL = searchResults.map((contact, idx) => {
     return (
@@ -57,7 +51,7 @@ function ContactDiscovery ({ setContactDisc, socket }) {
           flexDir='column'
         >
           <Discovery setContactDisc={setContactDisc} />
-          <Box rounded='lg' overflow='hidden' mx='3' my='1'>
+          <Box flexShrink='0' rounded='lg' overflow='hidden' mx='3' my='1'>
             <InputGroup rounded='lg' overflow='hidden' bg={bgColor}>
               <InputLeftElement pointerEvents='none'>
                 <SearchIcon color='gray.500' />
@@ -65,15 +59,16 @@ function ContactDiscovery ({ setContactDisc, socket }) {
               <Input
                 border='none'
                 color={searchTextColor}
-                // value={searchQuery}
                 onChange={e => {
                   if (e.target.value.length > 0) {
                     socket.emit('searchContact', {
                       searchQuery: e.target.value
                     })
+                  } else {
+                    setSearchResults([])
                   }
                 }}
-                type='tel'
+                type='text'
                 placeholder='Enter a username'
                 rounded='lg'
                 overflow='hidden'
