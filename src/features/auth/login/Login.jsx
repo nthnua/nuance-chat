@@ -50,15 +50,6 @@ export const LoginPage = () => {
         isClosable: true
       })
     }
-    if (loginStatus === 'success') {
-      toast({
-        title: "You're in!",
-        description: 'Happy chatting',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      })
-    }
     if (loginStatus === 'failed') {
       toast({
         title: 'Oops!',
