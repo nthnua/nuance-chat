@@ -12,11 +12,12 @@ import Contact from './Contact'
 import { useColorModeValue } from '@chakra-ui/color-mode'
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
 import ContactDiscovery from './ContactDiscovery'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import FriendRequest from './FriendRequest'
 
 const ContactList = ({ contacts, socket, friendRequests }) => {
   const [contactDisc, setContactDisc] = useState(false)
+  const [localContacts, setLocalContacts] = useState(contacts)
 
   const borderColor = useColorModeValue('white', 'gray.700')
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
@@ -24,7 +25,24 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
   const selfId = useSelector(state => state.auth.session.id)
   const activeChatId = useSelector(state => state.lounge.activeChatMeta.id)
 
-  const CL = contacts?.map((contact, id) => {
+  useEffect(() => {
+    setLocalContacts(contacts)
+  }, [contacts])
+
+  const handleChange = e => {
+    const searchQuery = e.target.value.toLowerCase()
+    if (searchQuery.length > 0) {
+      setLocalContacts(
+        contacts.filter(
+          c => c.name.toLowerCase().includes(searchQuery) || c.id.toLowerCase().includes(searchQuery)
+        )
+      )
+    } else {
+      setLocalContacts(contacts)
+    }
+  }
+
+  const CL = localContacts?.map((contact, id) => {
     const isActiveChat = contact.id === activeChatId
     return (
       contact.id !== selfId && (
@@ -99,6 +117,7 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
                   <SearchIcon color='gray.500' />
                 </InputLeftElement>
                 <Input
+                  onChange={handleChange}
                   _focus={{ boxShadow: 'none' }}
                   border='none'
                   color={searchTextColor}
