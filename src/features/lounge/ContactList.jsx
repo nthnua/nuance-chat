@@ -5,7 +5,8 @@ import {
   IconButton,
   Input,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
+  Text
 } from '@chakra-ui/react'
 import { useSelector } from 'react-redux'
 import Contact from './Contact'
@@ -18,12 +19,11 @@ import FriendRequest from './FriendRequest'
 const ContactList = ({ contacts, socket, friendRequests }) => {
   const [contactDisc, setContactDisc] = useState(false)
   const [localContacts, setLocalContacts] = useState(contacts)
-
   const borderColor = useColorModeValue('white', 'gray.700')
   const searchTextColor = useColorModeValue('gray.700', 'gray.200')
-
   const selfId = useSelector(state => state.auth.session.id)
   const activeChatId = useSelector(state => state.lounge.activeChatMeta.id)
+  const contactsState = useSelector(state=>state.lounge.contactsStatus)
 
   useEffect(() => {
     setLocalContacts(contacts)
@@ -131,7 +131,11 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
             <Divider />
             <Flex flexDir='column' overflow='auto'>
               {FR}
-              {CL}
+              {contacts.length===0 && friendRequests.length===0 && contactsState==='loaded' ?  
+              <Text p='4' alignSelf='center' color='GrayText' textAlign='center' w={['full',null,'md']} fontSize={'md','xl','3xl'}>Hello there 👋,<br/>
+               Find a friend to start a conversation 💬.<br/>
+               Click the ⊕ button below to find your friends.
+               </Text>:CL}
             </Flex>
           </Flex>
         </Flex>
