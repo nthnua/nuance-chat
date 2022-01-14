@@ -27,8 +27,8 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('')
   const url = `${backendUrl}/api/login`
   // colors
-  const loginPromptBg = useColorModeValue('#FFF', '#2F4858')
-  const pageBg = useColorModeValue('#87E0E1', '#5A8D98')
+  const loginPromptBg = useColorModeValue('white', 'gray.700')
+  const pageBg = useColorModeValue('green.300', 'gray.800')
   const loginStatus = useSelector(state => state.auth.login.status)
   // redux dispatcher
   const dispatch = useDispatch()
@@ -80,9 +80,10 @@ export const LoginPage = () => {
             w='sm'
             h='xl'
             bgColor={loginPromptBg}
-            borderRadius='base'
+            rounded={['md', null, 'xl']}
             flexDir='column'
             justify='space-around'
+            shadow='lg'
           >
             <Heading mb='-2'>Hi there!</Heading>
             <Text fontWeight='light' fontSize={['md', null, 'lg']}>
@@ -108,7 +109,7 @@ export const LoginPage = () => {
             </FormControl>
             <Button
               fontSize={['md', null, 'lg']}
-              colorScheme='teal'
+              colorScheme='green'
               alignSelf='flex-start'
               type='submit'
               disabled={loginStatus === 'pending'}

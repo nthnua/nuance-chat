@@ -154,7 +154,7 @@ function RegisterModal ({ isOpen, onClose }) {
               <Button
                 disabled={signupStatus === 'pending'}
                 type='submit'
-                colorScheme='teal'
+                colorScheme='green'
                 mr={3}
               >
                 Register
