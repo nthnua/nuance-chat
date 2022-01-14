@@ -65,6 +65,7 @@ function ContactDiscovery ({ contacts, setContactDisc, socket }) {
               <Input
                 border='none'
                 color={searchTextColor}
+                autoFocus
                 onChange={e => {
                   if (e.target.value.length > 0) {
                     socket.emit('searchContact', {
