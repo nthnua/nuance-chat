@@ -1,9 +1,10 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { Flex, useColorMode, Text } from '@chakra-ui/react'
+import { Flex, useColorMode, Text, Image } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { requestLogout } from '../auth/authSlice'
 import { backendUrl } from '../../service/config'
+import logo from '../../logo.svg'
 
 export const NavBar = ({ socket }) => {
   const dispatch = useDispatch()
@@ -31,7 +32,10 @@ export const NavBar = ({ socket }) => {
       top='0'
       height='8vh'
     >
-      <Text fontSize='lg'>nuance.chat</Text>
+      <Flex flexDir='row' alignItems='center'>
+        <Image src={logo} alt='nuance logo' boxSize='60px' />
+        <Text px='4' fontSize='lg' fontWeight='bold'>Nuance Chat</Text>
+      </Flex>
       <Flex alignItems='center'>
         <ColorModeToggleButton
           cursor='pointer'
