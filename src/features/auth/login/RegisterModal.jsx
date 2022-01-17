@@ -23,6 +23,7 @@ import { backendUrl } from '../../../service/config'
 import { useSelector, useDispatch } from 'react-redux'
 import { requestSignup } from '../authSlice'
 import { IoMdAddCircleOutline } from 'react-icons/io'
+import imageCompression from 'browser-image-compression'
 
 function RegisterModal ({ isOpen, onClose }) {
   const [username, setUsername] = useState('')
@@ -112,14 +113,21 @@ function RegisterModal ({ isOpen, onClose }) {
                       <Input
                         display='contents'
                         type='file'
-                        onChange={e => {
-                          const reader = new FileReader()
-                          reader.readAsDataURL(e.target.files[0])
-                          reader.onloadend = () => {
-                            const imgUrl = reader.result
-                            console.log(imgUrl)
-                            setImage(imgUrl)
+                        accept='image/*'
+                        onChange={async (e) => {
+                          const imageFile = e.target.files[0]
+                          const options = {
+                            maxSizeMB: 0.2,
+                            maxWidthOrHeight: 1920,
+                            useWebWorker: true
                           }
+                          imageCompression(imageFile, options)
+                            .then((compressedFile) => {
+                              imageCompression.getDataUrlFromFile(compressedFile).then((imgUrl) => {
+                                setImage(imgUrl)
+                              }).catch(err => console.error(err))
+                            })
+                            .catch(err => console.log(err))
                         }}
                       />
                     </Avatar>
