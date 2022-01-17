@@ -8,7 +8,7 @@ import { Heading } from '@chakra-ui/layout'
 import { IconButton } from '@chakra-ui/button'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useHistory } from 'react-router'
-export const ContactsNavbar = ({ name }) => {
+export const ContactsNavbar = ({ name, image }) => {
   const history = useHistory()
   const bgColor = useColorModeValue('#dce3ea', 'gray.600')
 
@@ -31,7 +31,7 @@ export const ContactsNavbar = ({ name }) => {
       <Heading size='sm' alignSelf='center'>
         {name}
       </Heading>
-      <Avatar size={useBreakpointValue({ base: 'sm', md: 'md' })} />
+      <Avatar size={useBreakpointValue({ base: 'sm', md: 'md' })} name={name} src={image} />
     </Flex>
   )
 }

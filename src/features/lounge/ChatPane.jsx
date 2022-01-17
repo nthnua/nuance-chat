@@ -27,6 +27,9 @@ const ChatPane = ({ socket }) => {
   const name = useSelector(state => state.lounge.contacts).find(
     c => c.id === chatId
   )?.name
+  const image = useSelector(state => state.lounge.contacts).find(
+    c => c.id === chatId
+  )?.image
   const bubbleColor = useColorModeValue('green.200', 'green.700')
   const bgColor = useColorModeValue('white', 'gray.700')
   const chatInputBgColor = useColorModeValue('gray.200', 'gray.800')
@@ -124,7 +127,7 @@ const ChatPane = ({ socket }) => {
       overflow='hidden'
       boxShadow='2xl'
     >
-      <ContactsNavbar name={name} />
+      <ContactsNavbar name={name} image={image} />
       <Flex
         w='100%'
         pt='2'
