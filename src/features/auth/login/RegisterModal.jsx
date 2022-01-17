@@ -71,8 +71,6 @@ function RegisterModal ({ isOpen, onClose }) {
     return () => toast.closeAll()
   }, [signupStatus, signupMessage, toast])
 
-  useEffect(() => {
-  })
   const initialRef = useRef()
   return (
     <Modal
@@ -114,7 +112,7 @@ function RegisterModal ({ isOpen, onClose }) {
                         display='contents'
                         type='file'
                         accept='image/*'
-                        onChange={async (e) => {
+                        onChange={e => {
                           const imageFile = e.target.files[0]
                           const options = {
                             maxSizeMB: 0.2,
@@ -127,7 +125,7 @@ function RegisterModal ({ isOpen, onClose }) {
                                 setImage(imgUrl)
                               }).catch(err => console.error(err))
                             })
-                            .catch(err => console.log(err))
+                            .catch(err => console.error(err))
                         }}
                       />
                     </Avatar>
