@@ -57,8 +57,8 @@ export const requestLogout = createAsyncThunk(
 )
 export const requestSignup = createAsyncThunk(
   'auth/requestSignup',
-  ({ url, username, age, email, realName, password }) => client.post(url, {
-    username, age, email, realName, password
+  ({ url, username, age, email, realName, password, image }) => client.post(url, {
+    username, age, email, realName, password, image
   })
 )
 

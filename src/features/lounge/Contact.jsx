@@ -4,7 +4,7 @@ import { useHistory } from 'react-router'
 import { setActiveChatMeta } from './loungeSlice'
 import { useColorModeValue } from '@chakra-ui/color-mode'
 
-const Contact = ({ id, name, isActiveChat, fromSearch, realName }) => {
+const Contact = ({ id, name, isActiveChat, fromSearch, realName, image }) => {
   const hoverColor = useColorModeValue('gray.100', '#3e4656') // custom color cause gray.700 or 500 doesn't work
   const activeColor = useColorModeValue('gray.200', 'gray.600')
   const history = useHistory()
@@ -32,7 +32,7 @@ const Contact = ({ id, name, isActiveChat, fromSearch, realName }) => {
       transition='ease-in 100ms'
       _hover={!isActiveChat && { bgColor: hoverColor }}
     >
-      <Avatar name={name} />
+      <Avatar name={name} src={image} />
       <Text px='2'>{name}</Text>
     </Flex>
   )

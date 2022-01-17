@@ -14,11 +14,16 @@ import {
   Grid,
   GridItem,
   Text,
-  useToast
+  useToast,
+  Avatar,
+  AvatarBadge,
+  Icon
 } from '@chakra-ui/react'
 import { backendUrl } from '../../../service/config'
 import { useSelector, useDispatch } from 'react-redux'
 import { requestSignup } from '../authSlice'
+import { IoMdAddCircleOutline } from 'react-icons/io'
+import imageCompression from 'browser-image-compression'
 
 function RegisterModal ({ isOpen, onClose }) {
   const [username, setUsername] = useState('')
@@ -26,6 +31,7 @@ function RegisterModal ({ isOpen, onClose }) {
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
   const [realName, setRealName] = useState('')
+  const [image, setImage] = useState(null)
 
   const url = `${backendUrl}/api/signup`
 
@@ -38,7 +44,7 @@ function RegisterModal ({ isOpen, onClose }) {
   const registerUser = e => {
     e.preventDefault()
     // not so fancy redux stuff
-    dispatch(requestSignup({ url, username, age, email, realName, password }))
+    dispatch(requestSignup({ url, username, age, email, realName, password, image }))
   }
 
   useEffect(() => {
@@ -95,6 +101,35 @@ function RegisterModal ({ isOpen, onClose }) {
                 )
               : (
                 <>
+                  <FormControl>
+                    <Avatar iconLabel='Add Image' size='xl' src={image}>
+                      <FormLabel>
+                        <AvatarBadge>
+                          <Icon as={IoMdAddCircleOutline} />
+                        </AvatarBadge>
+                      </FormLabel>
+                      <Input
+                        display='contents'
+                        type='file'
+                        accept='image/*'
+                        onChange={e => {
+                          const imageFile = e.target.files[0]
+                          const options = {
+                            maxSizeMB: 0.2,
+                            maxWidthOrHeight: 1920,
+                            useWebWorker: true
+                          }
+                          imageCompression(imageFile, options)
+                            .then((compressedFile) => {
+                              imageCompression.getDataUrlFromFile(compressedFile).then((imgUrl) => {
+                                setImage(imgUrl)
+                              }).catch(err => console.error(err))
+                            })
+                            .catch(err => console.error(err))
+                        }}
+                      />
+                    </Avatar>
+                  </FormControl>
                   <FormControl isRequired>
                     <FormLabel>Username</FormLabel>
                     <Input

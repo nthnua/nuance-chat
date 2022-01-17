@@ -52,6 +52,7 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
           id={contact.id}
           name={contact.name}
           peerId={contact.peerId}
+          image={contact.image}
         />
       )
     )
@@ -135,7 +136,7 @@ const ContactList = ({ contacts, socket, friendRequests }) => {
                 ? <Text p='4' alignSelf='center' color='GrayText' textAlign='center' w={['full', null, 'md']} fontSize={['xl', null, '3xl']}>Hello there 👋,<br />
                   Find a friend to start a conversation 💬.<br />
                   Click the ⊕ button below to find your friends.
-                  </Text>
+                </Text>
                 : CL}
             </Flex>
           </Flex>
