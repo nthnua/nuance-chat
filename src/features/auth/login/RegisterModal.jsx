@@ -17,12 +17,15 @@ import {
   useToast,
   Avatar,
   AvatarBadge,
-  Icon
+  Icon,
+  InputRightElement,
+  InputGroup,
+  IconButton
 } from '@chakra-ui/react'
 import { backendUrl } from '../../../service/config'
 import { useSelector, useDispatch } from 'react-redux'
 import { requestSignup } from '../authSlice'
-import { IoMdAddCircleOutline } from 'react-icons/io'
+import { IoMdAddCircleOutline, IoMdEyeOff, IoMdEye } from 'react-icons/io'
 import imageCompression from 'browser-image-compression'
 
 function RegisterModal ({ isOpen, onClose }) {
@@ -32,6 +35,7 @@ function RegisterModal ({ isOpen, onClose }) {
   const [age, setAge] = useState('')
   const [realName, setRealName] = useState('')
   const [image, setImage] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const url = `${backendUrl}/api/signup`
 
@@ -61,7 +65,7 @@ function RegisterModal ({ isOpen, onClose }) {
     if (signupStatus === 'rejected') {
       toast({
         title: 'Oops!',
-        description: signupMessage,
+        description: signupMessage === 'Bad Request' ? 'Please enter valid information' : 'Something went wrong!',
         status: 'error',
         duration: 7000,
         isClosable: true
@@ -141,12 +145,22 @@ function RegisterModal ({ isOpen, onClose }) {
                   </FormControl>
                   <FormControl isRequired mt={4}>
                     <FormLabel>Password</FormLabel>
-                    <Input
-                      type='password'
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      placeholder='Password'
-                    />
+                    <InputGroup>
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        minLength='5'
+                        maxLength='62'
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder='Password'
+                      />
+                      <InputRightElement onClick={() => {
+                        setShowPassword(!showPassword)
+                      }}
+                      >
+                        <Icon as={showPassword ? IoMdEyeOff : IoMdEye} />
+                      </InputRightElement>
+                    </InputGroup>
                   </FormControl>
                   <FormControl isRequired mt={4}>
                     <FormLabel>Email</FormLabel>
