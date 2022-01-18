@@ -16,11 +16,9 @@ import {
   Text,
   useToast,
   Avatar,
-  AvatarBadge,
   Icon,
   InputRightElement,
-  InputGroup,
-  IconButton
+  InputGroup
 } from '@chakra-ui/react'
 import { backendUrl } from '../../../service/config'
 import { useSelector, useDispatch } from 'react-redux'
@@ -105,34 +103,31 @@ function RegisterModal ({ isOpen, onClose }) {
                 )
               : (
                 <>
+                  <Avatar iconLabel='Add Image' size='xl' src={image} />
                   <FormControl>
-                    <Avatar iconLabel='Add Image' size='xl' src={image}>
-                      <FormLabel>
-                        <AvatarBadge>
-                          <Icon as={IoMdAddCircleOutline} />
-                        </AvatarBadge>
-                      </FormLabel>
-                      <Input
-                        display='contents'
-                        type='file'
-                        accept='image/*'
-                        onChange={e => {
-                          const imageFile = e.target.files[0]
-                          const options = {
-                            maxSizeMB: 0.2,
-                            maxWidthOrHeight: 1920,
-                            useWebWorker: true
-                          }
-                          imageCompression(imageFile, options)
-                            .then((compressedFile) => {
-                              imageCompression.getDataUrlFromFile(compressedFile).then((imgUrl) => {
-                                setImage(imgUrl)
-                              }).catch(err => console.error(err))
-                            })
-                            .catch(err => console.error(err))
-                        }}
-                      />
-                    </Avatar>
+                    <FormLabel>
+                      <Icon w='8' h='8' as={IoMdAddCircleOutline} />
+                    </FormLabel>
+                    <Input
+                      display='contents'
+                      type='file'
+                      accept='image/*'
+                      onChange={e => {
+                        const imageFile = e.target.files[0]
+                        const options = {
+                          maxSizeMB: 0.2,
+                          maxWidthOrHeight: 1920,
+                          useWebWorker: true
+                        }
+                        imageCompression(imageFile, options)
+                          .then((compressedFile) => {
+                            imageCompression.getDataUrlFromFile(compressedFile).then((imgUrl) => {
+                              setImage(imgUrl)
+                            }).catch(err => console.error(err))
+                          })
+                          .catch(err => console.error(err))
+                      }}
+                    />
                   </FormControl>
                   <FormControl isRequired>
                     <FormLabel>Username</FormLabel>
