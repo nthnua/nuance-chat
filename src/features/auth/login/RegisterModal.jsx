@@ -16,13 +16,14 @@ import {
   Text,
   useToast,
   Avatar,
-  AvatarBadge,
-  Icon
+  Icon,
+  InputRightElement,
+  InputGroup
 } from '@chakra-ui/react'
 import { backendUrl } from '../../../service/config'
 import { useSelector, useDispatch } from 'react-redux'
 import { requestSignup } from '../authSlice'
-import { IoMdAddCircleOutline } from 'react-icons/io'
+import { IoMdAddCircleOutline, IoMdEyeOff, IoMdEye } from 'react-icons/io'
 import imageCompression from 'browser-image-compression'
 
 function RegisterModal ({ isOpen, onClose }) {
@@ -32,6 +33,7 @@ function RegisterModal ({ isOpen, onClose }) {
   const [age, setAge] = useState('')
   const [realName, setRealName] = useState('')
   const [image, setImage] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const url = `${backendUrl}/api/signup`
 
@@ -61,7 +63,7 @@ function RegisterModal ({ isOpen, onClose }) {
     if (signupStatus === 'rejected') {
       toast({
         title: 'Oops!',
-        description: signupMessage,
+        description: signupMessage === 'Bad Request' ? 'Please enter valid information' : 'Something went wrong!',
         status: 'error',
         duration: 7000,
         isClosable: true
@@ -101,34 +103,31 @@ function RegisterModal ({ isOpen, onClose }) {
                 )
               : (
                 <>
+                  <Avatar iconLabel='Add Image' size='xl' src={image} />
                   <FormControl>
-                    <Avatar iconLabel='Add Image' size='xl' src={image}>
-                      <FormLabel>
-                        <AvatarBadge>
-                          <Icon as={IoMdAddCircleOutline} />
-                        </AvatarBadge>
-                      </FormLabel>
-                      <Input
-                        display='contents'
-                        type='file'
-                        accept='image/*'
-                        onChange={e => {
-                          const imageFile = e.target.files[0]
-                          const options = {
-                            maxSizeMB: 0.2,
-                            maxWidthOrHeight: 1920,
-                            useWebWorker: true
-                          }
-                          imageCompression(imageFile, options)
-                            .then((compressedFile) => {
-                              imageCompression.getDataUrlFromFile(compressedFile).then((imgUrl) => {
-                                setImage(imgUrl)
-                              }).catch(err => console.error(err))
-                            })
-                            .catch(err => console.error(err))
-                        }}
-                      />
-                    </Avatar>
+                    <FormLabel>
+                      <Icon w='8' h='8' as={IoMdAddCircleOutline} />
+                    </FormLabel>
+                    <Input
+                      display='contents'
+                      type='file'
+                      accept='image/*'
+                      onChange={e => {
+                        const imageFile = e.target.files[0]
+                        const options = {
+                          maxSizeMB: 0.2,
+                          maxWidthOrHeight: 1920,
+                          useWebWorker: true
+                        }
+                        imageCompression(imageFile, options)
+                          .then((compressedFile) => {
+                            imageCompression.getDataUrlFromFile(compressedFile).then((imgUrl) => {
+                              setImage(imgUrl)
+                            }).catch(err => console.error(err))
+                          })
+                          .catch(err => console.error(err))
+                      }}
+                    />
                   </FormControl>
                   <FormControl isRequired>
                     <FormLabel>Username</FormLabel>
@@ -141,12 +140,22 @@ function RegisterModal ({ isOpen, onClose }) {
                   </FormControl>
                   <FormControl isRequired mt={4}>
                     <FormLabel>Password</FormLabel>
-                    <Input
-                      type='password'
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      placeholder='Password'
-                    />
+                    <InputGroup>
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        minLength='5'
+                        maxLength='62'
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder='Password'
+                      />
+                      <InputRightElement onClick={() => {
+                        setShowPassword(!showPassword)
+                      }}
+                      >
+                        <Icon as={showPassword ? IoMdEyeOff : IoMdEye} />
+                      </InputRightElement>
+                    </InputGroup>
                   </FormControl>
                   <FormControl isRequired mt={4}>
                     <FormLabel>Email</FormLabel>
