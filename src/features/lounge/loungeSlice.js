@@ -83,7 +83,6 @@ const loungeSlice = createSlice({
     updateChats: (state, action) => {
       state.contacts = state.contacts.map((contact, index) => {
         if (contact.id === action.payload.chatId) {
-          console.log(action.payload.data)
           contact.chats = action.payload.data.messages
           contact = {
             ...contact,
@@ -95,11 +94,8 @@ const loungeSlice = createSlice({
       })
     },
     updateChatPart: (state, action) => {
-      console.log(action.payload)
       state.contacts = state.contacts.map((contact, index) => {
-        console.log(contact.id, action.payload.reciever)
         if (contact.id === action.payload.reciever) {
-          // const olderMsgs = action.payload.messages.reverse()
           contact.chats.push(...action.payload.messages)
         }
         return contact
