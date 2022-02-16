@@ -4,7 +4,8 @@ import {
   IconButton,
   useColorModeValue,
   Box,
-  Divider
+  Divider,
+  Skeleton
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,6 +20,7 @@ const ChatPane = ({ socket }) => {
   const chatId = useSelector((state) => state.lounge.activeChatMeta.id)
   const authToken = useSelector((state) => state.auth.session.token)
   const userId = useSelector((state) => state.auth.session.id)
+  const msgCount = useSelector((state) => state.lounge.activeChatMeta.msgCount)
   const chats = useSelector((state) => {
     return state.lounge.contacts.length !== 0
       ? state.lounge.contacts.find((contact) => contact.id === chatId).chats
@@ -48,13 +50,13 @@ const ChatPane = ({ socket }) => {
     if (chatId && socket) {
       // get the chat for the contact and connect to the peer
       // dispatch(getChat({ url, authToken, id: chatId }))
-      dispatch(setActiveChatMeta({ id: chatId }))
+      dispatch(setActiveChatMeta({ id: chatId, msgCount: 0 }))
       socket.emit('getChats', {
         chatId
       })
       // setConnection(peer.connect(peerId));
     }
-    return () => dispatch(setActiveChatMeta({ id: '' }))
+    return () => dispatch(setActiveChatMeta({ id: '', msgCount: 0 }))
   }, [chatId, dispatch, url, authToken, socket])
 
   // useEffect(() => {
@@ -80,7 +82,7 @@ const ChatPane = ({ socket }) => {
     }
 
     setTimeout(() => chatRef.current?.scrollIntoView({ behavior: 'smooth' }), 1) // scroll after 1 tick, won't work otherwise
-  }, [chats, userId, bubbleColor])
+  }, [chats, userId, bubbleColor, msgCount])
 
   // useEffect(() => {
   //   if (connection) {
@@ -111,16 +113,17 @@ const ChatPane = ({ socket }) => {
       }
     )
     if (loader.current) observer.observe(loader.current)
-  }, [chats])
+  }, [chats, isLoading, loader])
   useEffect(() => {
-    if (isLoading && chats.length !== 0) {
+    // length-1 to account for friend request
+    if (isLoading && msgCount !== chats.length - 1) {
       socket.emit('loadChatPart', {
         sender: userId,
         reciever: chatId,
         currentCount: chats.length
       })
     }
-  }, [isLoading, socket])
+  }, [isLoading, socket, chatId, userId, msgCount])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -157,15 +160,21 @@ const ChatPane = ({ socket }) => {
         w='100%'
         pt='2'
         pb='1'
-        flexDir='column'
+        flexDir='column-reverse'
         grow='1'
         overflowY='auto'
         overflowX='hidden'
       >
-        <div ref={loader}>Loading...</div>
-        {chatBubbles}
+
         {/* 👇 dummy div to scroll to bottom of the chat on sending message */}
         <div ref={chatRef} />
+        {chatBubbles}
+        {/* chats.length - 1 to account for friend request */}
+        <Skeleton
+          key={-1}
+          isLoaded={msgCount === chats.length - 1}
+          p='4' alignSelf='center' rounded='full' ref={loader}
+        />
       </Flex>
       <Divider />
       <Box>

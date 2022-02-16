@@ -10,7 +10,8 @@ const initialState = {
     status: ''
   },
   activeChatMeta: {
-    id: ''
+    id: '',
+    msgCount: 0
   },
   activeChat: [],
   friendRequests: []
@@ -60,9 +61,11 @@ const loungeSlice = createSlice({
       state.activeChatMeta.id = action.payload.id
     },
     addChat: (state, action) => {
+      // msgCount is client side
       state.contacts = state.contacts.map((contact, index) => {
         if (contact.id === action.payload.chatId) {
-          contact.chats.push(action.payload.data)
+          contact.chats.unshift(action.payload.data)
+          state.activeChatMeta.msgCount++
         }
         return contact
       })
@@ -80,7 +83,13 @@ const loungeSlice = createSlice({
     updateChats: (state, action) => {
       state.contacts = state.contacts.map((contact, index) => {
         if (contact.id === action.payload.chatId) {
+          console.log(action.payload.data)
           contact.chats = action.payload.data.messages
+          contact = {
+            ...contact,
+            msgCount: action.payload.data.msgCount
+          }
+          state.activeChatMeta.msgCount = action.payload.data.msgCount
         }
         return contact
       })
@@ -90,8 +99,8 @@ const loungeSlice = createSlice({
       state.contacts = state.contacts.map((contact, index) => {
         console.log(contact.id, action.payload.reciever)
         if (contact.id === action.payload.reciever) {
-          const olderMsgs = action.payload.messages.reverse()
-          contact.chats = [...olderMsgs, ...contact.chats]
+          // const olderMsgs = action.payload.messages.reverse()
+          contact.chats.push(...action.payload.messages)
         }
         return contact
       })
