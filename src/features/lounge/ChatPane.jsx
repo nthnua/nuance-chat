@@ -122,7 +122,7 @@ const ChatPane = ({ socket }) => {
         currentCount: chats.length
       })
     }
-  }, [isLoading, socket, chatId, userId, msgCount])
+  }, [isLoading, socket, chatId, userId, msgCount, chats.length])
 
   const handleSubmit = (e) => {
     e.preventDefault()
