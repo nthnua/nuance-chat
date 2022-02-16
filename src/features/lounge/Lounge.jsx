@@ -6,7 +6,8 @@ import {
   updateChats,
   addChat,
   addFriendRequest,
-  addContact
+  addContact,
+  updateChatPart
 } from './loungeSlice'
 import ChatPane from './ChatPane'
 import { Flex, useBreakpointValue, useColorModeValue } from '@chakra-ui/react'
@@ -21,11 +22,11 @@ export const Lounge = ({ socket }) => {
   const bgColor = useColorModeValue('gray.100', 'gray.800')
 
   const dispatch = useDispatch()
-  const authToken = useSelector(state => state.auth.session.token)
-  const contacts = useSelector(state => state.lounge.contacts)
-  const chatId = useSelector(state => state.lounge.activeChatMeta.id)
-  const contactsStatus = useSelector(state => state.lounge.contactsStatus)
-  const friendRequests = useSelector(state => state.lounge.friendRequests)
+  const authToken = useSelector((state) => state.auth.session.token)
+  const contacts = useSelector((state) => state.lounge.contacts)
+  const chatId = useSelector((state) => state.lounge.activeChatMeta.id)
+  const contactsStatus = useSelector((state) => state.lounge.contactsStatus)
+  const friendRequests = useSelector((state) => state.lounge.friendRequests)
   // const url = `${backendUrl}/api/lounge`
   // const socket = io(backendUrl, {
   //   auth: {
@@ -47,7 +48,7 @@ export const Lounge = ({ socket }) => {
   useEffect(() => {
     if (chatId) {
       socket.removeAllListeners('batchMessages')
-      socket.once('batchMessages', data => {
+      socket.once('batchMessages', (data) => {
         dispatch(updateChats({ chatId, data }))
       })
     }
@@ -67,10 +68,10 @@ export const Lounge = ({ socket }) => {
   useEffect(() => {
     // once every chatMessage contacts state gets updated
     socket.removeAllListeners('chatMessage')
-    socket.on('chatMessage', data => {
+    socket.removeAllListeners('gotChatPart')
+    socket.on('chatMessage', (data) => {
       // TODO: handle this somewhere else
-      if (contacts.some(contact => contact.id === data.sender)) {
-        console.log(data)
+      if (contacts.some((contact) => contact.id === data.sender)) {
         dispatch(
           addChat({
             chatId: data.sender,
@@ -95,15 +96,18 @@ export const Lounge = ({ socket }) => {
       //   )
       // }
     })
-
-    socket.once('connect_error', err => {
+    socket.on('gotChatPart', (data) => {
+      // console.log(data)
+      dispatch(updateChatPart(data))
+    })
+    socket.once('connect_error', (err) => {
       console.error(err)
     })
   }, [dispatch, authToken, contactsStatus, contacts, socket])
 
   useEffect(() => {
     socket.removeAllListeners('newContact')
-    socket.on('newContact', data => {
+    socket.on('newContact', (data) => {
       dispatch(addContact(data))
     })
   }, [dispatch, socket])

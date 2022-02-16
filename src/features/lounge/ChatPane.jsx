@@ -16,19 +16,19 @@ import { ContactsNavbar } from '../navbars/Contacts'
 
 const ChatPane = ({ socket }) => {
   const dispatch = useDispatch()
-  const chatId = useSelector(state => state.lounge.activeChatMeta.id)
-  const authToken = useSelector(state => state.auth.session.token)
-  const userId = useSelector(state => state.auth.session.id)
-  const chats = useSelector(state => {
+  const chatId = useSelector((state) => state.lounge.activeChatMeta.id)
+  const authToken = useSelector((state) => state.auth.session.token)
+  const userId = useSelector((state) => state.auth.session.id)
+  const chats = useSelector((state) => {
     return state.lounge.contacts.length !== 0
-      ? state.lounge.contacts.find(contact => contact.id === chatId).chats
+      ? state.lounge.contacts.find((contact) => contact.id === chatId).chats
       : []
   })
-  const name = useSelector(state => state.lounge.contacts).find(
-    c => c.id === chatId
+  const name = useSelector((state) => state.lounge.contacts).find(
+    (c) => c.id === chatId
   )?.name
-  const image = useSelector(state => state.lounge.contacts).find(
-    c => c.id === chatId
+  const image = useSelector((state) => state.lounge.contacts).find(
+    (c) => c.id === chatId
   )?.image
   const bubbleColor = useColorModeValue('green.200', 'green.700')
   const bgColor = useColorModeValue('white', 'gray.700')
@@ -38,7 +38,9 @@ const ChatPane = ({ socket }) => {
   const [message, setMessage] = useState('')
   const [chatBubbles, setChatBubbles] = useState([])
 
+  const [isLoading, setIsLoading] = useState(false)
   const chatRef = useRef()
+  const loader = useRef()
 
   const url = `${backendUrl}/api/chats/${chatId}`
 
@@ -97,7 +99,30 @@ const ChatPane = ({ socket }) => {
   //   dispatch(setActiveChatMeta({ chatId }))
   // }, [chatId, dispatch])
 
-  const handleSubmit = e => {
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries, observer) => {
+        if (isLoading !== entries[0].isIntersecting) {
+          setIsLoading(entries[0].isIntersecting)
+        }
+      },
+      {
+        threshold: 1.0
+      }
+    )
+    if (loader.current) observer.observe(loader.current)
+  }, [chats])
+  useEffect(() => {
+    if (isLoading && chats.length !== 0) {
+      socket.emit('loadChatPart', {
+        sender: userId,
+        reciever: chatId,
+        currentCount: chats.length
+      })
+    }
+  }, [isLoading, socket])
+
+  const handleSubmit = (e) => {
     e.preventDefault()
     e.stopPropagation()
     // send message
@@ -111,7 +136,7 @@ const ChatPane = ({ socket }) => {
         type: 'chatMessage'
       }
       dispatch(addChat({ chatId, data }))
-      socket.emit('chatMessage', data, recievedData => {
+      socket.emit('chatMessage', data, (recievedData) => {
         console.log(recievedData)
       })
       setMessage('')
@@ -137,6 +162,7 @@ const ChatPane = ({ socket }) => {
         overflowY='auto'
         overflowX='hidden'
       >
+        <div ref={loader}>Loading...</div>
         {chatBubbles}
         {/* 👇 dummy div to scroll to bottom of the chat on sending message */}
         <div ref={chatRef} />
@@ -151,7 +177,7 @@ const ChatPane = ({ socket }) => {
               placeholder='Type a message'
               rounded='full'
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={(e) => setMessage(e.target.value)}
               mx='1'
               // px='3'
               autoFocus

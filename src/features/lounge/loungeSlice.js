@@ -85,8 +85,19 @@ const loungeSlice = createSlice({
         return contact
       })
     },
+    updateChatPart: (state, action) => {
+      console.log(action.payload)
+      state.contacts = state.contacts.map((contact, index) => {
+        console.log(contact.id, action.payload.reciever)
+        if (contact.id === action.payload.reciever) {
+          const olderMsgs = action.payload.messages.reverse()
+          contact.chats = [...olderMsgs, ...contact.chats]
+        }
+        return contact
+      })
+    },
     getActiveChat: (state, action) => {
-      state.contacts.forEach(contact => {
+      state.contacts.forEach((contact) => {
         if (contact.id === action.payload.chatId) {
           state.activeChat = contact.chats
         }
@@ -101,12 +112,14 @@ const loungeSlice = createSlice({
     },
     removeFriendRequest: (state, action) => {
       console.log(action.payload)
-      state.friendRequests = state.friendRequests.filter(friendReq => friendReq._id !== action.payload._id)
+      state.friendRequests = state.friendRequests.filter(
+        (friendReq) => friendReq._id !== action.payload._id
+      )
     }
   },
-  extraReducers: builder =>
+  extraReducers: (builder) =>
     builder
-      .addCase(fetchContacts.pending, state => {
+      .addCase(fetchContacts.pending, (state) => {
         state.status = 'pending'
         state.contactsStatus = 'pending'
       })
@@ -119,7 +132,7 @@ const loungeSlice = createSlice({
         state.status = 'idle'
         state.error = action.error
       })
-      .addCase(getChat.pending, state => {
+      .addCase(getChat.pending, (state) => {
         state.status = 'pending'
       })
       .addCase(getChat.fulfilled, (state, action) => {
@@ -147,7 +160,8 @@ export const {
   updateContacts,
   updateChats,
   addFriendRequest,
-  removeFriendRequest
+  removeFriendRequest,
+  updateChatPart
 } = loungeSlice.actions
 
 export default loungeSlice.reducer
