@@ -104,16 +104,15 @@ const ChatPane = ({ socket }) => {
   useEffect(() => {
     const observer = new window.IntersectionObserver(
       (entries, observer) => {
-        if (isLoading !== entries[0].isIntersecting) {
-          setIsLoading(entries[0].isIntersecting)
-        }
+        setIsLoading(entries[0].isIntersecting)
       },
       {
         threshold: 1.0
       }
     )
     if (loader.current) observer.observe(loader.current)
-  }, [chats, isLoading, loader])
+    return () => observer.disconnect()
+  }, [chats])
   useEffect(() => {
     // length-1 to account for friend request
     if (isLoading && msgCount !== chats.length - 1) {
