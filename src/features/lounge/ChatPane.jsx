@@ -65,19 +65,14 @@ const ChatPane = ({ socket }) => {
   useEffect(() => {
     if (chats.length !== 0) {
       setChatBubbles(
-        chats.map((chat, id) => {
-          if (chat.type !== 'friendRequest') {
-            return (
-              <ChatBubble
-                key={id}
-                text={chat.content}
-                sender={chat.sender === userId}
-                color={bubbleColor}
-              />
-            )
-          }
-          return null
-        })
+        chats.map((chat, id) => (
+          <ChatBubble
+            key={id}
+            text={chat.content}
+            sender={chat.sender === userId}
+            color={bubbleColor}
+          />
+        ))
       )
     }
 
@@ -114,8 +109,7 @@ const ChatPane = ({ socket }) => {
     return () => observer.disconnect()
   }, [chats])
   useEffect(() => {
-    // length-1 to account for friend request
-    if (isLoading && msgCount !== chats.length - 1) {
+    if (isLoading && msgCount !== chats.length) {
       socket.emit('loadChatPart', {
         sender: userId,
         reciever: chatId,
@@ -168,10 +162,9 @@ const ChatPane = ({ socket }) => {
         {/* 👇 dummy div to scroll to bottom of the chat on sending message */}
         <div ref={chatRef} />
         {chatBubbles}
-        {/* chats.length - 1 to account for friend request */}
         <Skeleton
           key={-1}
-          isLoaded={msgCount === chats.length - 1}
+          isLoaded={msgCount === chats.length && !isLoading}
           p='4' alignSelf='center' rounded='full' ref={loader}
         />
       </Flex>
