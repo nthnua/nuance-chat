@@ -1,4 +1,4 @@
-# ![Nuance logo](https://raw.githubusercontent.com/nthnua/nullish.tech/main/public/nuance/nuance.svg) Nuance Chat
+# [![Nuance logo](https://raw.githubusercontent.com/nthnua/nullish.tech/main/public/nuance/nuance.svg) Nuance Chat](https://nuance.nullish.tech)
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
